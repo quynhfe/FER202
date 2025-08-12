@@ -9,12 +9,12 @@ function SkillRanking() {
     return acc;
   }, {});
 
-  const sorted = Object.entries(skillCount).sort((a, b) => b[1] - a[1]);
+  const sorted = Object.entries(skillCount).sort(([, countA], [, countB]) => countB - countA);
   const topCount = sorted[0]?.[1];
 
   return (
-    <table border="1" cellPadding="5">
-      <thead>
+    <table className="table table-hover table-bordered" style={{ maxWidth: '300px' }}>
+      <thead className="table-dark">
         <tr>
           <th>Skill</th>
           <th>Count</th>
@@ -22,9 +22,9 @@ function SkillRanking() {
       </thead>
       <tbody>
         {sorted.map(([skill, count]) => (
-          <tr key={skill} style={{ fontWeight: count === topCount ? "bold" : "normal" }}>
-            <td>{skill}</td>
-            <td>{count}</td>
+          <tr key={skill}>
+            <td>{count === topCount ? <strong>{skill}</strong> : skill}</td>
+            <td>{count === topCount ? <strong>{count}</strong> : count}</td>
           </tr>
         ))}
       </tbody>
