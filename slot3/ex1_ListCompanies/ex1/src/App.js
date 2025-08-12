@@ -1,10 +1,10 @@
 import './App.css';
+import ListCompanies from './ListCompanies';
 
 function App() {
   return (
     <div className="App">
-      <h1>Hello React</h1>
-      <p>My name is Quynh</p>
+     <ListCompanies />
     </div>
   );
 }
