@@ -21,8 +21,9 @@ const StyledNavLink = styled(Nav.Link)`
   color: #025331ff !important; 
   font-weight: 600;
   &.active {
-    color: #fc933dff !important;
-  }
+  border-bottom: 2px solid #fc933dff !important;
+}
+
   @media (max-width: 991px) {
     text-align: center;
     padding: 8px 0;
@@ -65,7 +66,7 @@ function Header() {
         </BrandTitle>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="mx-auto">
+          <Nav className="mx-auto" activeKey="/recipes">
             <StyledNavLink href="/home">Home</StyledNavLink>
             <StyledNavLink href="/about">About</StyledNavLink>
             <StyledNavLink href="/recipes">Recipes</StyledNavLink>
