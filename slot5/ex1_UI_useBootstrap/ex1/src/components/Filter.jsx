@@ -39,14 +39,29 @@ const SearchInput = styled.input`
   }
 `;
 
-const Filter = ({ searchTerm, setSearchTerm, maxPrepTime, setMaxPrepTime, maxCookTime, setMaxCookTime }) => {
+const Filter = ({
+  searchTerm, setSearchTerm,
+  maxPrepTime, setMaxPrepTime,
+  maxCookTime, setMaxCookTime,
+  sortOption, setSortOption
+}) => {
   return (
     <FilterSection>
       <div className="container">
         <div className="row align-items-center">
-          <div className="col-md-6">
-            {/* CẬP NHẬT: Thêm các lớp flex để xếp chồng trên màn hình nhỏ */}
+          <div className="col-md-8">
             <div className="d-flex flex-column flex-sm-row gap-3">
+
+              <FilterDropdown value={sortOption} onChange={(e) => setSortOption(e.target.value)}>
+                <option value="">Sort by</option>
+                <option value="name-asc">Name A → Z</option>
+                <option value="name-desc">Name Z → A</option>
+                <option value="prep-asc">Prep Time ↑</option>
+                <option value="prep-desc">Prep Time ↓</option>
+                <option value="cook-asc">Cook Time ↑</option>
+                <option value="cook-desc">Cook Time ↓</option>
+              </FilterDropdown>
+
               <FilterDropdown value={maxPrepTime} onChange={(e) => setMaxPrepTime(e.target.value)}>
                 <option value="">Max Prep Time</option>
                 <option value="5">5 mins</option>
@@ -54,7 +69,8 @@ const Filter = ({ searchTerm, setSearchTerm, maxPrepTime, setMaxPrepTime, maxCoo
                 <option value="15">15 mins</option>
                 <option value="20">20+ mins</option>
               </FilterDropdown>
-              
+
+
               <FilterDropdown value={maxCookTime} onChange={(e) => setMaxCookTime(e.target.value)}>
                 <option value="">Max Cook Time</option>
                 <option value="0">No cooking</option>
@@ -64,7 +80,8 @@ const Filter = ({ searchTerm, setSearchTerm, maxPrepTime, setMaxPrepTime, maxCoo
               </FilterDropdown>
             </div>
           </div>
-          <div className="col-md-6 mt-3 mt-md-0">
+
+          <div className="col-md-4 mt-3 mt-md-0">
             <div className="d-flex justify-content-md-end">
               <SearchInput
                 type="text"
