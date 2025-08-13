@@ -35,8 +35,14 @@ const column = [
         title: 'End Year',
         dataIndex: 'end',
         key: 'end',
+    },
+    {
+        title: 'Duration (years)',
+        key: 'duration',
+        render: (_, record) => record.end - record.start
     }
 ];
+
 
 function ListCompanies() {
     const [searchText, setSearchText] = useState("");
