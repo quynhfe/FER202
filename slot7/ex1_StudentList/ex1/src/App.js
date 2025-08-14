@@ -5,23 +5,23 @@ import { Container, Row, Col } from "react-bootstrap";
 import StudentCard from "./components/StudentCard";
 import "bootstrap/dist/css/bootstrap.min.css";
 function App() {
-  const userData = { name: "traltb@fe.edu.vn", age: 39 };
-  const namesList = ["traltb@fe.edu.vn", "test@fe.edu.vn"];
+  const userData = { name: "quynh@gmail.com", age: 22 };
+  const namesList = ["quynh@gmail.com", "test@fe.edu.vn"];
 
   const students = [
     {
-      name: "traltb1@fe.edu.vn",
+      name: "quynh1@gmail.com",
       age: 39,
       avatar:
         "https://i.pinimg.com/736x/5e/77/d4/5e77d493baac7d0302ab4f5866063fe9.jpg",
     },
     {
-      name: "traltb2@fe.edu.vn",
+      name: "quynh2@gmail.com",
       age: 40,
       avatar: "https://pbs.twimg.com/media/FIMUOPkVgAE74wz.jpg",
     },
     {
-      name: "traltb3@fe.edu.vn",
+      name: "quynh3@gmail.com",
       age: 41,
       avatar:
         "https://reactormag.com/wp-content/uploads/2025/04/Whisper-of-the-Heart-library.jpg",
@@ -30,7 +30,7 @@ function App() {
 
   return (
     <div className="App" style={{ padding: "20px" }}>
-      <Welcome name="traltb@fe.edu.vn" />
+      <Welcome name="Tống Thị Như Quỳnh" />
       <UserProfile user={userData} />
       <NameList names={namesList} />
       <Container style={{ marginTop: "20px" }}>
