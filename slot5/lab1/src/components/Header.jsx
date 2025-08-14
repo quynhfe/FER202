@@ -1,15 +1,32 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import styled from 'styled-components';
-import { Nav, Button, Navbar, Container, Modal, Form } from 'react-bootstrap';
+import { Nav, Button, Navbar, Container, Modal, Form, Toast } from 'react-bootstrap';
 import { FaPaperPlane } from 'react-icons/fa';
 import logoImg from '../assets/logo.jpg';
 import { useState } from 'react';
 
-
-
 function Header() {
   const [showForm, setShowForm] = useState(false);
+  const [validated, setValidated] = useState(false);
+  const [showToast, setShowToast] = useState(false);
 
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+
+    if (form.checkValidity() === false) {
+      event.stopPropagation();
+    } else {
+      setShowToast(true)
+      setShowForm(false);
+    }
+    setValidated(true);
+  };
+  
+  const handleShow = () => {
+    setShowForm(true);
+    setValidated(false);
+  };
   return (
     <>
       <StyledNavbar expand="lg">
@@ -24,72 +41,96 @@ function Header() {
               <StyledNavLink href="/home">Home</StyledNavLink>
               <StyledNavLink href="/about">About</StyledNavLink>
               <StyledNavLink href="/recipes">Recipes</StyledNavLink>
-
             </Nav>
             <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-              <Button onClick={() => setShowForm(true)} style={{
-                cursor: 'pointer', backgroundColor: '#fc933dff', color: '#fff', borderRadius: '10px', border: 'none',
-                padding: '10px 20px'
-              }} >
+              <Button
+                onClick={() => handleShow(true)}
+                style={{
+                  cursor: 'pointer',
+                  backgroundColor: '#fc933dff',
+                  color: '#fff',
+                  borderRadius: '10px',
+                  border: 'none',
+                  padding: '10px 20px'
+                }}
+              >
                 Recipe Request Form
               </Button>
               <StyledButton>
-                Browse Recipes</StyledButton>
+                Browse Recipes
+              </StyledButton>
             </div>
           </Navbar.Collapse>
         </Container>
       </StyledNavbar>
-
 
       <Modal show={showForm} onHide={() => setShowForm(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Recipe Request Form</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form>
+          <Form noValidate validated={validated} onSubmit={handleSubmit}>
             <Form.Group className="mb-3">
               <Form.Label>Your Name</Form.Label>
               <Form.Control
+                required
                 type="text"
                 placeholder="Enter your name"
-                // isInvalid={true}
               />
               <Form.Control.Feedback type="invalid">
                 Please enter your name
               </Form.Control.Feedback>
             </Form.Group>
 
-
             <Form.Group className="mb-3">
               <Form.Label>Email Address</Form.Label>
-              <Form.Control type="email" placeholder="Enter your email" />
+              <Form.Control
+                required
+                type="email"
+                placeholder="Enter your email"
+              />
               <Form.Control.Feedback type="invalid">
                 Please provide a valid email
               </Form.Control.Feedback>
             </Form.Group>
+
             <Form.Group className="mb-3">
               <Form.Label>Desired Ingredient</Form.Label>
-              <Form.Control type="text" placeholder="E.g., Fresh basil, chicken breast..." />
+              <Form.Control
+                required
+                type="text"
+                placeholder="E.g., Fresh basil, chicken breast..."
+              />
               <Form.Control.Feedback type="invalid">
                 Please enter your desired ingredient
               </Form.Control.Feedback>
             </Form.Group>
 
-
             <Form.Group className="mb-3">
               <Form.Label>Max Prep Time</Form.Label>
-              <Form.Select>
+              <Form.Select required>
+                <option value="">Select...</option>
                 <option>5 mins</option>
                 <option>10 mins</option>
                 <option>15 mins</option>
                 <option>30 mins</option>
               </Form.Select>
+              <Form.Control.Feedback type="invalid">
+                Please choose a max prep time
+              </Form.Control.Feedback>
             </Form.Group>
-
 
             <Form.Group className="mb-3">
               <Form.Label>Notes</Form.Label>
-              <Form.Control as="textarea" rows={3} placeholder="Any additional details..." />
+              <Form.Control
+                as="textarea"
+                rows={3}
+                placeholder="Any additional details..."
+                required
+              />
+              <Form.Control.Feedback type="invalid">
+                Please provide additional details
+              </Form.Control.Feedback>
             </Form.Group>
 
             <Button variant="primary" type="submit" className="d-flex align-items-center gap-2">
@@ -98,11 +139,28 @@ function Header() {
           </Form>
         </Modal.Body>
       </Modal>
+
+      <Toast
+        bg="success"
+        show={showToast}
+        onClose={() => setShowToast(false)}
+        delay={5000}
+        autohide
+        style={{
+          position: "fixed",
+          bottom: "20px",
+          right: "20px",
+          zIndex: 9999,
+        }}
+      >
+        <Toast.Body className="text-white">Form submitted successfully</Toast.Body>
+      </Toast>
     </>
   );
 }
 
 export default Header;
+
 const Logo = styled.img`
   width: 50px;
   height: 50px;

@@ -143,7 +143,7 @@ const RecipeList = ({ recipes = [], onViewRecipe }) => {
 
 export default RecipeList;
 
-// Styled Components
+
 const StyledPagination = styled(Pagination)`
   .page-item .page-link {
     color: black !important;
