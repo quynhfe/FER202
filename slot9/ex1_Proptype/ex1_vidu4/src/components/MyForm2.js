@@ -152,6 +152,7 @@ const MyForm2 = ({ title, onSubmit }) => {
             {errors.phone}
           </Form.Control.Feedback>
         </Form.Group>
+        
         <Form.Group controlId="formGender">
           <Form.Label>Giới tính</Form.Label>
           <Form.Control
