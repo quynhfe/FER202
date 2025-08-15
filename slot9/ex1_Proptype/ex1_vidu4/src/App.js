@@ -1,5 +1,5 @@
 import React from "react";
-import MyForm2 from "././components/MyForm2"; // Giả sử MyForm được lưu trong thư mục cùng với App.js
+import MyForm2 from "././components/MyForm2"; 
 
 const App = () => {
   const handleFormSubmit = (formData) => {
