@@ -1,5 +1,7 @@
+
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { Card, Button, Modal, Toast, Form } from 'react-bootstrap';
 
 const ProfileForm = () => {
   const [name, setName] = useState('');
@@ -56,230 +58,127 @@ const ProfileForm = () => {
       <div className="row justify-content-center">
         <div className="col-md-6">
           <Card>
-            <CardHeader>
+            <Card.Header>
               <h4 className="mb-0">Profile Form</h4>
-            </CardHeader>
-            <CardBody>
-              <div onSubmit={handleSubmit} className="needs-validation">
-
-                <FormGroup>
-                  <FormLabel htmlFor="name">Tên</FormLabel>
-                  <FormControl
+            </Card.Header>
+            <Card.Body>
+              <Form noValidate onSubmit={handleSubmit}>
+                <Form.Group className="mb-3" controlId="name">
+                  <Form.Label>Tên</Form.Label>
+                  <Form.Control
                     type="text"
-                    id="name"
-                    name="name"
                     placeholder="Enter your name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    isInvalid={validated && errors.name}
+                    isInvalid={validated && !!errors.name}
                     isValid={validated && !errors.name && name.trim()}
                   />
-                  {errors.name && (
-                    <FormFeedback type="invalid">{errors.name}</FormFeedback>
-                  )}
+                  <Form.Control.Feedback type="invalid">
+                    {errors.name}
+                  </Form.Control.Feedback>
                   {name && !errors.name && (
                     <div className="text-muted mt-1">My name is {name}</div>
                   )}
-                </FormGroup>
+                </Form.Group>
 
-                <FormGroup>
-                  <FormLabel htmlFor="email">Email</FormLabel>
-                  <FormControl
+                <Form.Group className="mb-3" controlId="email">
+                  <Form.Label>Email</Form.Label>
+                  <Form.Control
                     type="email"
-                    id="email"
-                    name="email"
                     placeholder="Enter your email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    isInvalid={validated && errors.email}
+                    isInvalid={validated && !!errors.email}
                     isValid={validated && !errors.email && email.trim()}
                   />
-                  {errors.email && (
-                    <FormFeedback type="invalid">{errors.email}</FormFeedback>
-                  )}
+                  <Form.Control.Feedback type="invalid">
+                    {errors.email}
+                  </Form.Control.Feedback>
                   {email && !errors.email && (
                     <div className="text-muted mt-1">My email is {email}</div>
                   )}
-                </FormGroup>
+                </Form.Group>
 
-                <FormGroup>
-                  <FormLabel htmlFor="age">Tuổi</FormLabel>
-                  <FormControl
+                <Form.Group className="mb-3" controlId="age">
+                  <Form.Label>Tuổi</Form.Label>
+                  <Form.Control
                     type="number"
-                    id="age"
-                    name="age"
                     placeholder="Enter your age"
                     value={age}
                     onChange={(e) => setAge(e.target.value)}
                     min="1"
-                    isInvalid={validated && errors.age}
+                    isInvalid={validated && !!errors.age}
                     isValid={validated && !errors.age && age}
                   />
-                  {errors.age && (
-                    <FormFeedback type="invalid">{errors.age}</FormFeedback>
-                  )}
+                  <Form.Control.Feedback type="invalid">
+                    {errors.age}
+                  </Form.Control.Feedback>
                   {age && !errors.age && (
                     <div className="text-muted mt-1">I am {age} years old</div>
                   )}
-                </FormGroup>
+                </Form.Group>
 
                 <div className="d-grid">
                   <Button
                     variant="primary"
-                    type="button"
+                    type="submit"
                     disabled={!name || !email || !age}
-                    onClick={handleSubmit}
                   >
                     Submit
                   </Button>
                 </div>
-              </div>
-            </CardBody>
+              </Form>
+            </Card.Body>
           </Card>
         </div>
       </div>
 
-      <Modal
-        show={showModal}
-        onClose={() => setShowModal(false)}
-        title="Thông tin đã submit"
-      >
-        <Card>
-          <CardHeader>
-            <h5 className="mb-0 text-success">
-              <i className="fas fa-check-circle me-2"></i>
-              Submit thành công!
-            </h5>
-          </CardHeader>
-          <CardBody>
-            <div className="row">
-              <div className="col-sm-4"><strong>Tên:</strong></div>
-              <div className="col-sm-8">{name}</div>
-            </div>
-            <hr />
-            <div className="row">
-              <div className="col-sm-4"><strong>Email:</strong></div>
-              <div className="col-sm-8">{email}</div>
-            </div>
-            <hr />
-            <div className="row">
-              <div className="col-sm-4"><strong>Tuổi:</strong></div>
-              <div className="col-sm-8">{age} tuổi</div>
-            </div>
-          </CardBody>
-        </Card>
+      <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Thông tin đã submit</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <h5 className="mb-3 text-success">
+            <i className="fas fa-check-circle me-2"></i>
+            Submit thành công!
+          </h5>
+          <div className="row">
+            <div className="col-sm-4"><strong>Tên:</strong></div>
+            <div className="col-sm-8">{name}</div>
+          </div>
+          <hr />
+          <div className="row">
+            <div className="col-sm-4"><strong>Email:</strong></div>
+            <div className="col-sm-8">{email}</div>
+          </div>
+          <hr />
+          <div className="row">
+            <div className="col-sm-4"><strong>Tuổi:</strong></div>
+            <div className="col-sm-8">{age} tuổi</div>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={() => setShowModal(false)}>
+            Đóng
+          </Button>
+        </Modal.Footer>
       </Modal>
 
       <Toast
         show={showToast}
         onClose={() => setShowToast(false)}
-        className="bg-success text-white"
+        bg="success"
+        className="text-white position-fixed top-0 end-0 m-3"
+        delay={3000}
+        autohide
       >
-        Submitted successfully!
+        <Toast.Header>
+          <strong className="me-auto">Thông báo</strong>
+        </Toast.Header>
+        <Toast.Body>Submitted successfully!</Toast.Body>
       </Toast>
     </div>
   );
 };
 
 export default ProfileForm;
-
-const FormGroup = ({ children, className = "" }) => (
-  <div className={`mb-3 ${className}`}>{children}</div>
-);
-
-const FormLabel = ({ children, htmlFor }) => (
-  <label htmlFor={htmlFor} className="form-label">{children}</label>
-);
-
-const FormControl = ({ type, placeholder, value, onChange, isInvalid, isValid, ...props }) => {
-  let className = "form-control";
-  if (isInvalid) className += " is-invalid";
-  if (isValid) className += " is-valid";
-
-  return (
-    <input
-      type={type}
-      className={className}
-      placeholder={placeholder}
-      value={value}
-      onChange={onChange}
-      {...props}
-    />
-  );
-};
-
-const FormFeedback = ({ type, children }) => (
-  <div className={`${type === 'invalid' ? 'invalid-feedback' : 'valid-feedback'}`}>
-    {children}
-  </div>
-);
-
-const Button = ({ variant, type, disabled, children, onClick }) => (
-  <button
-    type={type}
-    className={`btn btn-${variant}`}
-    disabled={disabled}
-    onClick={onClick}
-  >
-    {children}
-  </button>
-);
-
-const Modal = ({ show, onClose, title, children }) => {
-  if (!show) return null;
-
-  return (
-    <div className="modal show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
-      <div className="modal-dialog modal-dialog-centered">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title">{title}</h5>
-            <button
-              type="button"
-              className="btn-close"
-              onClick={onClose}
-              aria-label="Close"
-            ></button>
-          </div>
-          <div className="modal-body">{children}</div>
-          <div className="modal-footer">
-            <Button variant="primary" onClick={onClose}>
-              Đóng
-            </Button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const Toast = ({ show, onClose, children, className = "" }) => {
-  if (!show) return null;
-
-  return (
-    <div className={`toast show position-fixed top-0 end-0 m-3 ${className}`} role="alert">
-      <div className="toast-header">
-        <strong className="me-auto">Thông báo</strong>
-        <button
-          type="button"
-          className="btn-close"
-          onClick={onClose}
-          aria-label="Close"
-        ></button>
-      </div>
-      <div className="toast-body">{children}</div>
-    </div>
-  );
-};
-
-const Card = ({ children, className = "" }) => (
-  <div className={`card ${className}`}>{children}</div>
-);
-
-const CardHeader = ({ children }) => (
-  <div className="card-header">{children}</div>
-);
-
-const CardBody = ({ children }) => (
-  <div className="card-body">{children}</div>
-);
