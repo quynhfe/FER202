@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
+
 const FormGroup = ({ children, className = "" }) => (
   <div className={`mb-3 ${className}`}>{children}</div>
 );
@@ -74,7 +75,26 @@ const Modal = ({ show, onClose, title, children }) => {
   );
 };
 
-
+const Toast = ({ show, onClose, children, className = "" }) => {
+  if (!show) return null;
+  
+  return (
+    <div className={`toast show position-fixed top-0 end-0 m-3 ${className}`} role="alert">
+      <div className="toast-header">
+        <strong className="me-auto">Thông báo</strong>
+        <button
+          type="button"
+          className="btn-close"
+          onClick={onClose}
+          aria-label="Close"
+        ></button>
+      </div>
+      <div className="toast-body">
+        {children}
+      </div>
+    </div>
+  );
+};
 
 const Card = ({ children, className = "" }) => (
   <div className={`card ${className}`}>{children}</div>
@@ -98,6 +118,7 @@ const ProfileForm = () => {
   const [validated, setValidated] = useState(false);
   const [errors, setErrors] = useState({});
 
+  const [showToast, setShowToast] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
   const handleInputChange = (e) => {
@@ -144,8 +165,13 @@ const ProfileForm = () => {
     setValidated(true);
 
     if (validateForm()) {
+      setShowToast(true);
       setShowModal(true);
       console.log('Form submitted successfully:', formData);
+      
+      setTimeout(() => {
+        setShowToast(false);
+      }, 3000);
     }
   };
 
@@ -159,6 +185,7 @@ const ProfileForm = () => {
             </CardHeader>
             <CardBody>
               <div onSubmit={handleSubmit} className="needs-validation">
+                {/* Name Field */}
                 <FormGroup>
                   <FormLabel htmlFor="name">Tên</FormLabel>
                   <FormControl
@@ -244,14 +271,6 @@ const ProfileForm = () => {
                 </div>
               </div>
 
-              {!showModal && showModal === false && Object.values(formData).every(value => value) && validated && Object.keys(errors).length === 0 && (
-                <div className="mt-4 p-3 bg-light rounded">
-                  <h5>Thông tin đã submit thành công!</h5>
-                  <p><strong>Tên:</strong> {formData.name}</p>
-                  <p><strong>Email:</strong> {formData.email}</p>
-                  <p><strong>Tuổi:</strong> {formData.age}</p>
-                </div>
-              )}
             </CardBody>
           </Card>
         </div>
@@ -260,20 +279,41 @@ const ProfileForm = () => {
       <Modal
         show={showModal}
         onClose={() => setShowModal(false)}
-        title="Thành công!"
+        title="Thông tin đã submit"
       >
-        <div className="text-center">
-          <div className="mb-3">
-            <i className="fas fa-check-circle text-success" style={{fontSize: '3rem'}}></i>
-          </div>
-          <h5 className="text-success mb-3">Submitted successfully!</h5>
-          <div className="text-start">
-            <p><strong>Tên:</strong> {formData.name}</p>
-            <p><strong>Email:</strong> {formData.email}</p>
-            <p><strong>Tuổi:</strong> {formData.age}</p>
-          </div>
-        </div>
+        <Card>
+          <CardHeader>
+            <h5 className="mb-0 text-success">
+              <i className="fas fa-check-circle me-2"></i>
+              Submit thành công!
+            </h5>
+          </CardHeader>
+          <CardBody>
+            <div className="row">
+              <div className="col-sm-4"><strong>Tên:</strong></div>
+              <div className="col-sm-8">{formData.name}</div>
+            </div>
+            <hr />
+            <div className="row">
+              <div className="col-sm-4"><strong>Email:</strong></div>
+              <div className="col-sm-8">{formData.email}</div>
+            </div>
+            <hr />
+            <div className="row">
+              <div className="col-sm-4"><strong>Tuổi:</strong></div>
+              <div className="col-sm-8">{formData.age} tuổi</div>
+            </div>
+          </CardBody>
+        </Card>
       </Modal>
+
+      <Toast
+        show={showToast}
+        onClose={() => setShowToast(false)}
+        className="bg-success text-white"
+      >
+        Submitted successfully!
+      </Toast>
     </div>
   );
 };
