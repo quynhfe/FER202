@@ -15,6 +15,7 @@ const StudentDetailModal = ({ student, show, onHide }) => (
         onError={(e) => { e.target.onerror = null; e.target.src=`https://placehold.co/128x128/EBF4FF/7F9CF5?text=${student?.name.charAt(0)}`}}
       />
       <p><strong>ID:</strong> {student?.id}</p>
+      <p><strong>Name:</strong> {student?.name}</p>
       <p><strong>Email:</strong> {student?.email}</p>
       <p><strong>Age:</strong> {student?.age}</p>
     </Modal.Body>
