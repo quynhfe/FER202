@@ -1,7 +1,10 @@
-import React, { useState, useReducer, useMemo, useCallback, useEffect } from 'react';
+import React, { useReducer, useMemo, useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, Button, Form, Row, Col, InputGroup, Toast, ToastContainer, ProgressBar } from 'react-bootstrap';
-import { FaEye, FaEyeSlash, FaUser } from 'react-icons/fa';
+import { Modal, Button, ProgressBar, ToastContainer } from 'react-bootstrap';
+
+import AboutStep from './AboutStep';
+import AccountStep from './AccountStep';
+import AddressStep from './AddressStep';
 
 const initialState = {
     step: 1,
@@ -43,16 +46,6 @@ function wizardReducer(state, action) {
 const ProfileWizard = ({ show, handleClose, onAddStudent }) => {
     const [state, dispatch] = useReducer(wizardReducer, initialState);
     const [showToast, setShowToast] = useState(false);
-    const [showPass, setShowPass] = useState(false);
-    const [showConfirmPass, setShowConfirmPass] = useState(false);
-
-    const secretQuestions = [
-        "What is your first pet's name?", 
-        "What is your mother's maiden name?", 
-        "In which city were you born?", 
-        "Who was your favorite teacher?"
-    ];
-    const countries = ["Viet Nam", "Korea", "Italy", "Japan", "USA", "Germany", "France"];
 
     const validateStep = useCallback(() => {
         const { step, firstName, lastName, email, age, username, password, confirmPassword, secretQuestion, secretAnswer, streetName, streetNumber, city, country } = state;
@@ -127,299 +120,22 @@ const ProfileWizard = ({ show, handleClose, onAddStudent }) => {
         }, 300);
     };
 
-    const renderStep1 = () => (
-        <div style={{ padding: '20px' }}>
-            <h5 style={{ marginBottom: '20px', textAlign: 'center', color: '#495057' }}>Personal Information</h5>
-            
-            <Row>
-                <Col md={4} className="text-center mb-4">
-                    <Form.Label htmlFor="file-upload" style={{cursor: 'pointer'}}>
-                        {state.previewImage ? (
-                            <img 
-                                src={state.previewImage} 
-                                alt="Preview" 
-                                style={{
-                                    width: '100px', 
-                                    height: '100px', 
-                                    borderRadius: '50%', 
-                                    objectFit: 'cover', 
-                                    border: '3px solid #dee2e6'
-                                }} 
-                            />
-                        ) : (
-                            <div style={{
-                                width: '100px', 
-                                height: '100px', 
-                                borderRadius: '50%', 
-                                border: '2px dashed #adb5bd', 
-                                display: 'flex', 
-                                alignItems: 'center', 
-                                justifyContent: 'center',
-                                backgroundColor: '#f8f9fa'
-                            }}>
-                                <FaUser size={40} color="#adb5bd" />
-                            </div>
-                        )}
-                    </Form.Label>
-                    <Form.Control 
-                        id="file-upload" 
-                        type="file" 
-                        accept="image/*" 
-                        onChange={onFileChange} 
-                        className="d-none" 
-                    />
-                    <div style={{ fontSize: '0.8rem', color: '#6c757d', marginTop: '5px' }}>
-                        Upload Photo
-                    </div>
-                </Col>
-                
-                <Col md={8}>
-                    <Row>
-                        <Col md={6}>
-                            <Form.Group className="mb-3">
-                                <Form.Label>First Name *</Form.Label>
-                                <Form.Control 
-                                    type="text" 
-                                    value={state.firstName} 
-                                    onChange={(e) => onFieldChange('firstName', e.target.value)} 
-                                    isInvalid={!!state.errors.firstName}
-                                    style={{ borderRadius: '4px' }}
-                                />
-                                <Form.Control.Feedback type="invalid">
-                                    {state.errors.firstName}
-                                </Form.Control.Feedback>
-                            </Form.Group>
-                        </Col>
-                        <Col md={6}>
-                            <Form.Group className="mb-3">
-                                <Form.Label>Last Name *</Form.Label>
-                                <Form.Control 
-                                    type="text" 
-                                    value={state.lastName} 
-                                    onChange={(e) => onFieldChange('lastName', e.target.value)} 
-                                    isInvalid={!!state.errors.lastName}
-                                    style={{ borderRadius: '4px' }}
-                                />
-                                <Form.Control.Feedback type="invalid">
-                                    {state.errors.lastName}
-                                </Form.Control.Feedback>
-                            </Form.Group>
-                        </Col>
-                    </Row>
-                    
-                    <Form.Group className="mb-3">
-                        <Form.Label>Email *</Form.Label>
-                        <Form.Control 
-                            type="email" 
-                            value={state.email} 
-                            onChange={(e) => onFieldChange('email', e.target.value)} 
-                            isInvalid={!!state.errors.email}
-                            style={{ borderRadius: '4px' }}
-                        />
-                        <Form.Control.Feedback type="invalid">
-                            {state.errors.email}
-                        </Form.Control.Feedback>
-                    </Form.Group>
-                    
-                    <Form.Group className="mb-3">
-                        <Form.Label>Age *</Form.Label>
-                        <Form.Control 
-                            type="number" 
-                            value={state.age} 
-                            onChange={(e) => onFieldChange('age', parseInt(e.target.value))} 
-                            isInvalid={!!state.errors.age}
-                            style={{ borderRadius: '4px' }}
-                            min="1"
-                            max="100"
-                        />
-                        <Form.Control.Feedback type="invalid">
-                            {state.errors.age}
-                        </Form.Control.Feedback>
-                    </Form.Group>
-                </Col>
-            </Row>
-        </div>
-    );
-
-    const renderStep2 = () => (
-        <div style={{ padding: '20px' }}>
-            <h5 style={{ marginBottom: '20px', textAlign: 'center', color: '#495057' }}>Account Information</h5>
-            
-            <Form.Group className="mb-3">
-                <Form.Label>Username *</Form.Label>
-                <Form.Control 
-                    type="text" 
-                    value={state.username} 
-                    onChange={(e) => onFieldChange('username', e.target.value)} 
-                    isInvalid={!!state.errors.username}
-                    style={{ borderRadius: '4px' }}
-                />
-                <Form.Control.Feedback type="invalid">
-                    {state.errors.username}
-                </Form.Control.Feedback>
-            </Form.Group>
-            
-            <Form.Group className="mb-3">
-                <Form.Label>Password *</Form.Label>
-                <InputGroup>
-                    <Form.Control 
-                        type={showPass ? 'text' : 'password'} 
-                        value={state.password} 
-                        onChange={(e) => onFieldChange('password', e.target.value)} 
-                        isInvalid={!!state.errors.password}
-                        style={{ borderRadius: '4px 0 0 4px' }}
-                    />
-                    <Button 
-                        variant="outline-secondary" 
-                        onClick={() => setShowPass(!showPass)}
-                        style={{ borderRadius: '0 4px 4px 0' }}
-                    >
-                        {showPass ? <FaEyeSlash /> : <FaEye />}
-                    </Button>
-                </InputGroup>
-                {state.errors.password && (
-                    <div className="text-danger small mt-1">{state.errors.password}</div>
-                )}
-            </Form.Group>
-            
-            <Form.Group className="mb-3">
-                <Form.Label>Confirm Password *</Form.Label>
-                <InputGroup>
-                    <Form.Control 
-                        type={showConfirmPass ? 'text' : 'password'} 
-                        value={state.confirmPassword} 
-                        onChange={(e) => onFieldChange('confirmPassword', e.target.value)} 
-                        isInvalid={!!state.errors.confirmPassword}
-                        style={{ borderRadius: '4px 0 0 4px' }}
-                    />
-                    <Button 
-                        variant="outline-secondary" 
-                        onClick={() => setShowConfirmPass(!showConfirmPass)}
-                        style={{ borderRadius: '0 4px 4px 0' }}
-                    >
-                        {showConfirmPass ? <FaEyeSlash /> : <FaEye />}
-                    </Button>
-                </InputGroup>
-                {state.errors.confirmPassword && (
-                    <div className="text-danger small mt-1">{state.errors.confirmPassword}</div>
-                )}
-            </Form.Group>
-            
-            <Form.Group className="mb-3">
-                <Form.Label>Security Question *</Form.Label>
-                <Form.Select 
-                    value={state.secretQuestion} 
-                    onChange={(e) => onFieldChange('secretQuestion', e.target.value)} 
-                    isInvalid={!!state.errors.secretQuestion}
-                    style={{ borderRadius: '4px' }}
-                >
-                    <option value="">Choose a question...</option>
-                    {secretQuestions.map(q => (
-                        <option key={q} value={q}>{q}</option>
-                    ))}
-                </Form.Select>
-                <Form.Control.Feedback type="invalid">
-                    {state.errors.secretQuestion}
-                </Form.Control.Feedback>
-            </Form.Group>
-            
-            <Form.Group className="mb-3">
-                <Form.Label>Answer *</Form.Label>
-                <Form.Control 
-                    type="text" 
-                    value={state.secretAnswer} 
-                    onChange={(e) => onFieldChange('secretAnswer', e.target.value)} 
-                    isInvalid={!!state.errors.secretAnswer}
-                    style={{ borderRadius: '4px' }}
-                />
-                <Form.Control.Feedback type="invalid">
-                    {state.errors.secretAnswer}
-                </Form.Control.Feedback>
-            </Form.Group>
-        </div>
-    );
-
-    const renderStep3 = () => (
-        <div style={{ padding: '20px' }}>
-            <h5 style={{ marginBottom: '20px', textAlign: 'center', color: '#495057' }}>Address Information</h5>
-            
-            <Row>
-                <Col md={8}>
-                    <Form.Group className="mb-3">
-                        <Form.Label>Street Name *</Form.Label>
-                        <Form.Control 
-                            type="text" 
-                            value={state.streetName} 
-                            onChange={(e) => onFieldChange('streetName', e.target.value)} 
-                            isInvalid={!!state.errors.streetName}
-                            style={{ borderRadius: '4px' }}
-                        />
-                        <Form.Control.Feedback type="invalid">
-                            {state.errors.streetName}
-                        </Form.Control.Feedback>
-                    </Form.Group>
-                </Col>
-                <Col md={4}>
-                    <Form.Group className="mb-3">
-                        <Form.Label>Street Number *</Form.Label>
-                        <Form.Control 
-                            type="text" 
-                            value={state.streetNumber} 
-                            onChange={(e) => onFieldChange('streetNumber', e.target.value)} 
-                            isInvalid={!!state.errors.streetNumber}
-                            style={{ borderRadius: '4px' }}
-                        />
-                        <Form.Control.Feedback type="invalid">
-                            {state.errors.streetNumber}
-                        </Form.Control.Feedback>
-                    </Form.Group>
-                </Col>
-            </Row>
-            
-            <Row>
-                <Col md={6}>
-                    <Form.Group className="mb-3">
-                        <Form.Label>City *</Form.Label>
-                        <Form.Control 
-                            type="text" 
-                            value={state.city} 
-                            onChange={(e) => onFieldChange('city', e.target.value)} 
-                            isInvalid={!!state.errors.city}
-                            style={{ borderRadius: '4px' }}
-                        />
-                        <Form.Control.Feedback type="invalid">
-                            {state.errors.city}
-                        </Form.Control.Feedback>
-                    </Form.Group>
-                </Col>
-                <Col md={6}>
-                    <Form.Group className="mb-3">
-                        <Form.Label>Country *</Form.Label>
-                        <Form.Select 
-                            value={state.country} 
-                            onChange={(e) => onFieldChange('country', e.target.value)} 
-                            isInvalid={!!state.errors.country}
-                            style={{ borderRadius: '4px' }}
-                        >
-                            {countries.map(c => (
-                                <option key={c} value={c}>{c}</option>
-                            ))}
-                        </Form.Select>
-                        <Form.Control.Feedback type="invalid">
-                            {state.errors.country}
-                        </Form.Control.Feedback>
-                    </Form.Group>
-                </Col>
-            </Row>
-        </div>
-    );
-
     const renderStep = () => {
+        const commonProps = {
+            data: state,
+            onFieldChange: onFieldChange,
+            errors: state.errors
+        };
+
         switch (state.step) {
-            case 1: return renderStep1();
-            case 2: return renderStep2();
-            case 3: return renderStep3();
-            default: return null;
+            case 1:
+                return <AboutStep {...commonProps} onFileChange={onFileChange} />;
+            case 2:
+                return <AccountStep {...commonProps} />;
+            case 3:
+                return <AddressStep {...commonProps} />;
+            default:
+                return null;
         }
     };
 
@@ -434,15 +150,8 @@ const ProfileWizard = ({ show, handleClose, onAddStudent }) => {
 
     return (
         <>
-            <Modal 
-                show={show} 
-                onHide={closeAndReset} 
-                size="lg" 
-                centered 
-                backdrop="static" 
-                keyboard={false}
-            >
-                <Modal.Header 
+            <Modal show={show} onHide={closeAndReset} size="lg" centered backdrop="static" keyboard={false}>
+                 <Modal.Header 
                     closeButton 
                     style={{ 
                         backgroundColor: '#f8f9fa', 
@@ -455,7 +164,6 @@ const ProfileWizard = ({ show, handleClose, onAddStudent }) => {
                 </Modal.Header>
                 
                 <Modal.Body style={{ backgroundColor: '#ffffff', minHeight: '400px' }}>
-                    {/* Progress Bar */}
                     <div style={{ marginBottom: '25px' }}>
                         <div style={{ 
                             display: 'flex', 
@@ -505,7 +213,7 @@ const ProfileWizard = ({ show, handleClose, onAddStudent }) => {
                     )}
                     {state.step < 3 && (
                         <Button 
-                            className="btn-main-theme" 
+                            className="primary" 
                             onClick={nextStep} 
                             disabled={!isStepValid}
                             style={{ borderRadius: '4px' }}
@@ -527,20 +235,6 @@ const ProfileWizard = ({ show, handleClose, onAddStudent }) => {
             </Modal>
             
             <ToastContainer position="top-end" className="p-3" style={{ zIndex: 9999 }}>
-                <Toast 
-                    onClose={() => setShowToast(false)} 
-                    show={showToast} 
-                    delay={3000} 
-                    autohide 
-                    bg="success"
-                >
-                    <Toast.Header closeButton={false}>
-                        <strong className="me-auto text-white">Success</strong>
-                    </Toast.Header>
-                    <Toast.Body className="text-white">
-                        New profile added successfully!
-                    </Toast.Body>
-                </Toast>
             </ToastContainer>
         </>
     );
