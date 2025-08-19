@@ -5,6 +5,7 @@ import { Modal, Button, ProgressBar, ToastContainer } from 'react-bootstrap';
 import AboutStep from './AboutStep';
 import AccountStep from './AccountStep';
 import AddressStep from './AddressStep';
+import ConfirmationModal from './ConfirmationModal';
 
 const initialState = {
     step: 1,
@@ -46,6 +47,12 @@ function wizardReducer(state, action) {
 const ProfileWizard = ({ show, handleClose, onAddStudent }) => {
     const [state, dispatch] = useReducer(wizardReducer, initialState);
     const [showToast, setShowToast] = useState(false);
+    const [isAttempted, setIsAttempted] = useState(false);
+    const [showConfirmModal, setShowConfirmModal] = useState(false);
+
+    useEffect(() => {
+        setIsAttempted(false);
+    }, [state.step]);
 
     const validateStep = useCallback(() => {
         const { step, firstName, lastName, email, age, username, password, confirmPassword, secretQuestion, secretAnswer, streetName, streetNumber, city, country } = state;
@@ -76,17 +83,20 @@ const ProfileWizard = ({ show, handleClose, onAddStudent }) => {
     }, [state]);
 
     useEffect(() => {
-        if (show) validateStep();
-    }, [state.firstName, state.lastName, state.email, state.age, state.username, state.password, state.confirmPassword, state.secretQuestion, state.secretAnswer, state.streetName, state.streetNumber, state.city, state.country, show, validateStep]);
-
-    const isStepValid = useMemo(() => Object.keys(state.errors).length === 0, [state.errors]);
+        if (isAttempted) {
+            validateStep();
+        }
+    }, [state.firstName, state.lastName, state.email, state.age, state.username, state.password, state.confirmPassword, state.secretQuestion, state.secretAnswer, state.streetName, state.streetNumber, state.city, state.country, isAttempted, validateStep]);
+    
     const progress = useMemo(() => Math.round(((state.step - 1) / 2) * 100), [state.step]);
 
     const nextStep = useCallback(() => {
-        if (isStepValid && state.step < 3) {
+        setIsAttempted(true);
+        const isValid = validateStep();
+        if (isValid && state.step < 3) {
             dispatch({ type: 'SET_STEP', payload: state.step + 1 });
         }
-    }, [isStepValid, state.step]);
+    }, [state.step, validateStep]);
 
     const prevStep = useCallback(() => {
         if (state.step > 1) {
@@ -106,17 +116,25 @@ const ProfileWizard = ({ show, handleClose, onAddStudent }) => {
     }, []);
 
     const handleFinish = () => {
-        if (isStepValid) {
-            onAddStudent(state);
-            setShowToast(true);
-            closeAndReset();
+        setIsAttempted(true);
+        const isValid = validateStep();
+        if (isValid) {
+            setShowConfirmModal(true);
         }
     };
     
+    const handleConfirmAndSubmit = () => {
+        onAddStudent(state);
+        setShowToast(true);
+        setShowConfirmModal(false);
+        closeAndReset();
+    };
+
     const closeAndReset = () => {
         handleClose();
         setTimeout(() => {
             dispatch({ type: 'RESET' });
+            setIsAttempted(false);
         }, 300);
     };
 
@@ -124,7 +142,7 @@ const ProfileWizard = ({ show, handleClose, onAddStudent }) => {
         const commonProps = {
             data: state,
             onFieldChange: onFieldChange,
-            errors: state.errors
+            errors: isAttempted ? state.errors : {}
         };
 
         switch (state.step) {
@@ -215,7 +233,6 @@ const ProfileWizard = ({ show, handleClose, onAddStudent }) => {
                         <Button 
                             className="primary" 
                             onClick={nextStep} 
-                            disabled={!isStepValid}
                             style={{ borderRadius: '4px' }}
                         >
                             Next
@@ -223,9 +240,8 @@ const ProfileWizard = ({ show, handleClose, onAddStudent }) => {
                     )}
                     {state.step === 3 && (
                         <Button 
-                            className="btn-main-theme" 
+                            className="primary" 
                             onClick={handleFinish} 
-                            disabled={!isStepValid}
                             style={{ borderRadius: '4px' }}
                         >
                             Finish
@@ -234,6 +250,13 @@ const ProfileWizard = ({ show, handleClose, onAddStudent }) => {
                 </Modal.Footer>
             </Modal>
             
+            <ConfirmationModal 
+                show={showConfirmModal}
+                onHide={() => setShowConfirmModal(false)}
+                onConfirm={handleConfirmAndSubmit}
+                data={state}
+            />
+
             <ToastContainer position="top-end" className="p-3" style={{ zIndex: 9999 }}>
             </ToastContainer>
         </>
