@@ -47,7 +47,7 @@ function ValidatedInput() {
           </Form.Control.Feedback>
         </Form.Group>
 
-        <Button variant="primary" type="submit" disabled={!isValid}>
+        <Button variant="primary" type="submit" style={{marginTop:'10px'}} disabled={!isValid}>
           Gửi
         </Button>
       </Form>
@@ -58,7 +58,7 @@ function ValidatedInput() {
         </Modal.Header>
         <Modal.Body>Giá trị đã được gửi thành công!</Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>
+          <Button variant="primary" onClick={handleCloseModal}>
             Đóng
           </Button>
         </Modal.Footer>
