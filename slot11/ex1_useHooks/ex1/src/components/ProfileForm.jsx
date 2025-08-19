@@ -63,7 +63,8 @@ const ProfileForm = () => {
             </Card.Header>
             <Card.Body>
               <Form noValidate onSubmit={handleSubmit}>
-                <Form.Group className="mb-3" controlId="name">
+                <Form.Group
+                  className="mb-3 d-flex flex-column align-items-start" controlId="name">
                   <Form.Label>Tên</Form.Label>
                   <Form.Control
                     type="text"
@@ -81,7 +82,8 @@ const ProfileForm = () => {
                   )}
                 </Form.Group>
 
-                <Form.Group className="mb-3" controlId="email">
+                <Form.Group
+                  className="mb-3 d-flex flex-column align-items-start" controlId="email">
                   <Form.Label>Email</Form.Label>
                   <Form.Control
                     type="email"
@@ -99,7 +101,8 @@ const ProfileForm = () => {
                   )}
                 </Form.Group>
 
-                <Form.Group className="mb-3" controlId="age">
+                <Form.Group
+                  className="mb-3 d-flex flex-column align-items-start" controlId="age">
                   <Form.Label>Tuổi</Form.Label>
                   <Form.Control
                     type="number"

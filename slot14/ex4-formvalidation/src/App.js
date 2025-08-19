@@ -1,10 +1,10 @@
 import './App.css';
-import ProfileForm from './components/ProfileForm';
+import ValidatedInput from './components/ValidatedInput';
 
 function App() {
   return (
     <div className="App">
-      <ProfileForm />
+      <ValidatedInput />
     </div>
   );
 }
