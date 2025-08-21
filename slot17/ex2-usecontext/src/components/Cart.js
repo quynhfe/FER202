@@ -1,33 +1,13 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import { CartContext } from "../context/CartContext";
 import { Modal, Button } from "react-bootstrap";
 
-const Cart = () => {
+const Cart = ({ isDarkMode }) => {
   const { cartItems, removeFromCart, clearCart, totalValue } =
     useContext(CartContext);
 
   const [showConfirm, setShowConfirm] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
-
-  useEffect(() => {
-    const appElement = document.querySelector(".App");
-    const checkDarkMode = () => {
-      setIsDarkMode(appElement?.classList.contains("dark-mode") || false);
-    };
-
-    checkDarkMode();
-
-    const observer = new MutationObserver(checkDarkMode);
-    if (appElement) {
-      observer.observe(appElement, {
-        attributes: true,
-        attributeFilter: ["class"],
-      });
-    }
-
-    return () => observer.disconnect();
-  }, []);
 
   const handleCheckout = () => {
     setShowConfirm(true);

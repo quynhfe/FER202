@@ -77,7 +77,7 @@ function App() {
           </div>
         </nav>
         <DishesList dishes={filteredDishes} />
-        <Cart />
+        <Cart isDarkMode={isDarkMode} />
       </div>
     </CartProvider>
   );
