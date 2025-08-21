@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { CartContext } from "../context/CartContext";
 import { Modal, Button } from "react-bootstrap";
 
@@ -8,6 +8,26 @@ const Cart = () => {
 
   const [showConfirm, setShowConfirm] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    const appElement = document.querySelector(".App");
+    const checkDarkMode = () => {
+      setIsDarkMode(appElement?.classList.contains("dark-mode") || false);
+    };
+
+    checkDarkMode();
+
+    const observer = new MutationObserver(checkDarkMode);
+    if (appElement) {
+      observer.observe(appElement, {
+        attributes: true,
+        attributeFilter: ["class"],
+      });
+    }
+
+    return () => observer.disconnect();
+  }, []);
 
   const handleCheckout = () => {
     setShowConfirm(true);
@@ -22,6 +42,8 @@ const Cart = () => {
       clearCart();
     }, 2000);
   };
+
+  const modalClass = isDarkMode ? "dark-mode-modal" : "";
 
   return (
     <div className="container my-4">
@@ -72,17 +94,21 @@ const Cart = () => {
         </div>
       )}
 
-      <Modal show={showConfirm} onHide={() => setShowConfirm(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Xác nhận thanh toán</Modal.Title>
+      <Modal
+        show={showConfirm}
+        onHide={() => setShowConfirm(false)}
+        contentClassName={modalClass}
+      >
+        <Modal.Header closeButton className={modalClass}>
+          <Modal.Title className={modalClass}>Xác nhận thanh toán</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body className={modalClass}>
           <h5>Hóa đơn của bạn</h5>
           <ul className="list-group mb-3">
             {cartItems.map((item) => (
               <li
                 key={item.id}
-                className="list-group-item d-flex justify-content-between"
+                className={`list-group-item d-flex justify-content-between ${modalClass}`}
               >
                 <span>{item.name}</span>
                 <span>${parseFloat(item.price).toFixed(2)}</span>
@@ -91,7 +117,7 @@ const Cart = () => {
           </ul>
           <p className="fw-bold text-end">Tổng cộng: ${totalValue}</p>
         </Modal.Body>
-        <Modal.Footer>
+        <Modal.Footer className={modalClass}>
           <Button variant="secondary" onClick={() => setShowConfirm(false)}>
             Hủy
           </Button>
@@ -101,19 +127,18 @@ const Cart = () => {
         </Modal.Footer>
       </Modal>
 
-      <Modal show={showSuccess} onHide={() => setShowSuccess(false)} centered>
-        <Modal.Body className="text-center">
-          <h4 className="text-success">✅ Thanh toán thành công!</h4>
-        </Modal.Body>
-      </Modal>
-
-      <Modal show={showSuccess} onHide={() => setShowSuccess(false)} centered>
-        <Modal.Header closeButton>
-          <Modal.Title className="text-success">
+      <Modal
+        show={showSuccess}
+        onHide={() => setShowSuccess(false)}
+        centered
+        contentClassName={modalClass}
+      >
+        <Modal.Header closeButton className={modalClass}>
+          <Modal.Title className={`text-success ${modalClass}`}>
             ✅ Thanh toán thành công
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body className="text-center">
+        <Modal.Body className={`text-center ${modalClass}`}>
           <p>Cảm ơn bạn đã mua hàng 🎉</p>
         </Modal.Body>
       </Modal>
