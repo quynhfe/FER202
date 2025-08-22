@@ -25,11 +25,13 @@ export const CartProvider = ({ children }) => {
     const savedCart = JSON.parse(localStorage.getItem("cartItems"));
     if (savedCart) {
       setCartItems(savedCart);
+      // console.log("Cart loaded from localStorage:", savedCart);
     }
   }, []);
 
   useEffect(() => {
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
+    // console.log("Cart updated:", cartItems);
   }, [cartItems]);
 
   return (

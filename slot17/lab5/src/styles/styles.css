@@ -1,0 +1,365 @@
+:root {
+  /* Chế độ Sáng (Light Mode) */
+  --bg-primary-light: #f8f9fa;
+  --bg-secondary-light: #ffffff;
+  --text-primary-light: #212529;
+  --text-secondary-light: #6c757d;
+  --border-light: #dee2e6;
+
+  /* Chế độ Tối (Dark Mode) - Dựa trên mã màu bạn cung cấp */
+  --bg-primary-dark: #0f0f23; /* Nền chính */
+  --bg-secondary-dark: #1a1a2e; /* Nền Navbar, Modal Footer/Header */
+  --bg-tertiary-dark: #16213e; /* Nền Card, Modal Body, List Item */
+  --text-primary-dark: #e9ecef; /* Chữ chính (trắng ngà) */
+  --text-secondary-dark: #8d99ae; /* Chữ phụ (xám nhạt) */
+  --border-dark: #0f3460; /* Viền chính */
+  --accent-dark: #0e6ba8; /* Màu nhấn khi hover, focus */
+
+  /* Màu sắc chung */
+  --primary-color: #5dade2; /* Text-primary màu xanh sáng */
+  --success-color: #28a745; /* Text-success màu xanh lá cây */
+  --danger-color: #ed4245; /* Màu đỏ cho nút xóa, lỗi */
+
+  /* Hiệu ứng & Bo góc */
+  --border-radius: 0.5rem;
+  --shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  --shadow-lg: 0 1rem 3rem rgba(0, 0, 0, 0.175);
+  --shadow-dark: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* --- 2. Style chung & Chế độ Sáng --- */
+body {
+  background-color: var(--bg-primary-light);
+  color: var(--text-primary-light);
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.card,
+.modal-content,
+.list-group-item,
+.alert {
+  background-color: var(--bg-secondary-light);
+  border: 1px solid var(--border-light);
+  border-radius: var(--border-radius);
+  color: var(--text-primary-light);
+}
+
+.form-control,
+.form-select {
+  background-color: var(--bg-secondary-light);
+  border: 1px solid var(--border-light);
+  color: var(--text-primary-light);
+}
+
+.modal-header,
+.modal-footer {
+  border-color: var(--border-light);
+}
+
+/* --- 3. Ghi đè cho Chế độ Tối (Dark Mode) --- */
+body.dark-mode {
+  background-color: var(--bg-primary-dark);
+  color: var(--text-primary-dark);
+}
+
+body.dark-mode .card,
+body.dark-mode .list-group-item,
+body.dark-mode .alert {
+  background-color: var(--bg-tertiary-dark);
+  border-color: var(--border-dark);
+  color: var(--text-primary-dark);
+  box-shadow: var(--shadow-dark);
+}
+
+body.dark-mode .navbar.bg-light {
+  background-color: var(--bg-secondary-dark) !important;
+  border-bottom: 1px solid var(--border-dark);
+}
+
+body.dark-mode .modal-content {
+  background-color: var(--bg-tertiary-dark);
+  border-color: var(--border-dark);
+}
+
+body.dark-mode .modal-header,
+body.dark-mode .modal-footer {
+  background-color: var(--bg-secondary-dark);
+  border-color: var(--border-dark);
+}
+
+body.dark-mode .form-control,
+body.dark-mode .form-select {
+  background-color: var(--bg-secondary-dark);
+  border-color: var(--border-dark);
+  color: var(--text-primary-dark);
+}
+
+body.dark-mode .form-control:focus,
+body.dark-mode .form-select:focus {
+  border-color: var(--accent-dark);
+  box-shadow: 0 0 0 0.25rem rgba(14, 107, 168, 0.25);
+}
+
+body.dark-mode .text-muted {
+  color: var(--text-secondary-dark) !important;
+}
+
+body.dark-mode .text-primary {
+  color: var(--primary-color) !important;
+}
+
+body.dark-mode .text-success {
+  color: var(--success-color) !important;
+}
+
+body.dark-mode .btn-close {
+  filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+body.dark-mode .dish-filters {
+  background-color: var(--bg-tertiary-dark) !important;
+}
+
+body.dark-mode .card:hover {
+  border-color: var(--accent-dark);
+}
+
+/* --- 4. Style cho các Layout cụ thể --- */
+.auth-layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 1rem;
+  position: relative;
+}
+
+.auth-header {
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+  right: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.auth-brand {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-decoration: none;
+  color: inherit;
+}
+body.dark-mode .auth-brand {
+  color: var(--text-primary-dark);
+}
+
+/* --- 5. Style cho các Component --- */
+.hero-carousel .hero-image {
+  height: 60vh;
+  background-size: cover;
+  background-position: center;
+}
+.hero-carousel .hero-caption {
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 2rem;
+}
+
+.dish-card {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out,
+    border-color 0.2s ease-in-out;
+  overflow: hidden;
+}
+.dish-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+}
+.dish-card .img-box {
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+}
+.dish-card .img-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.dish-card .dish-category {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  font-size: 0.75rem;
+}
+
+.auth-card {
+  max-width: 480px;
+  width: 100%;
+}
+
+.wizard-header {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+.wizard-step {
+  flex: 1;
+  position: relative;
+  color: var(--text-secondary-light);
+}
+body.dark-mode .wizard-step {
+  color: var(--text-secondary-dark);
+}
+
+.wizard-step .wizard-step-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--bg-primary-light);
+  border: 2px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 0.5rem;
+  transition: all 0.3s ease;
+}
+
+body.dark-mode .wizard-step .wizard-step-icon {
+  background-color: var(--bg-primary-dark);
+  border-color: var(--border-dark);
+}
+.wizard-step.active .wizard-step-icon {
+  background-color: var(--accent-dark);
+  color: white;
+  border-color: var(--accent-dark);
+}
+.wizard-step.completed .wizard-step-icon {
+  background-color: var(--success-color);
+  color: white;
+  border-color: var(--success-color);
+}
+.profile-image-upload {
+  cursor: pointer;
+}
+.profile-image-preview {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--border-light);
+}
+.profile-image-preview.large {
+  width: 150px;
+  height: 150px;
+}
+body.dark-mode .profile-image-preview {
+  border-color: var(--border-dark);
+}
+.profile-image-placeholder {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 2px dashed var(--text-secondary-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-primary-light);
+}
+.profile-image-placeholder.large {
+  width: 150px;
+  height: 150px;
+}
+body.dark-mode .profile-image-placeholder {
+  background-color: var(--bg-primary-dark);
+  border-color: var(--text-secondary-dark);
+}
+.footer-section {
+  background-color: var(--bg-secondary-light);
+  border-top: 1px solid var(--border-light);
+  color: var(--text-secondary-light);
+  font-size: 0.9rem;
+}
+
+body.dark-mode .footer-section {
+  background-color: var(--bg-secondary-dark);
+  border-top: 1px solid var(--border-dark);
+  color: var(--text-secondary-dark);
+}
+
+.footer-section h5 {
+  color: var(--text-primary-light);
+  font-weight: bold;
+}
+
+body.dark-mode .footer-section h5 {
+  color: var(--text-primary-dark);
+}
+
+.footer-section .nav-link {
+  transition: color 0.2s ease;
+}
+
+.footer-section .nav-link:hover {
+  color: var(--primary-color) !important;
+}
+.image-upload-box {
+  width: 100%;
+  height: 200px;
+  border: 2px dashed var(--border-light);
+  border-radius: var(--border-radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+  overflow: hidden; /* Đảm bảo ảnh preview không bị tràn */
+}
+
+.image-upload-box:hover {
+  border-color: var(--primary-color);
+  background-color: #f8f9fa;
+}
+
+.image-upload-box.is-invalid {
+  border-color: var(--danger-color);
+}
+
+.image-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--text-secondary-light);
+}
+
+.image-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+body.dark-mode .image-upload-box {
+  border-color: var(--border-dark);
+}
+
+body.dark-mode .image-upload-box:hover {
+  border-color: var(--primary-color);
+  background-color: var(--bg-secondary-dark);
+}
+
+body.dark-mode .image-placeholder {
+  color: var(--text-secondary-dark);
+}
+.custom-toast-container {
+  top: 0px;
+}
+body.dark-mode .invalid-feedback {
+  /* Đổi màu chữ của feedback lỗi sang màu vàng warning */
+  color: var(--warning-color);
+}
+body .invalid-feedback {
+  color: #dc3545; /* Màu đỏ Bootstrap mặc định cho lỗi */
+}

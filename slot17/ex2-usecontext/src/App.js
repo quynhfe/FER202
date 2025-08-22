@@ -16,12 +16,8 @@ import {
 import { ThemeContext } from "./context/ThemeContext";
 
 function App() {
-  // const [isDarkMode, setIsDarkMode] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const { isDarkMode, toggleDarkMode } = useContext(ThemeContext);
-  // const toggleDarkMode = () => {
-  //   setIsDarkMode(!isDarkMode);
-  // };
 
   const filteredDishes = dishes.filter(
     (dish) =>

@@ -74,7 +74,6 @@ const Cart = ({ isDarkMode }) => {
         </Card>
       )}
 
-      {/* Render component Modal và truyền props */}
       <CartModals
         showConfirm={showConfirm}
         handleCloseConfirm={() => setShowConfirm(false)}
