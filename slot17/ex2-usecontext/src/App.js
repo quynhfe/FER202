@@ -1,18 +1,27 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { CartProvider } from "./context/CartContext";
 import DishesList from "./components/DishesList";
 import Cart from "./components/Cart";
 import "./styles/styles.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { dishes } from "./data/data";
+import {
+  Navbar,
+  Container,
+  Nav,
+  Form,
+  FormControl,
+  Button,
+} from "react-bootstrap";
+import { ThemeContext } from "./context/ThemeContext";
 
 function App() {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  // const [isDarkMode, setIsDarkMode] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
-  };
+  const { isDarkMode, toggleDarkMode } = useContext(ThemeContext);
+  // const toggleDarkMode = () => {
+  //   setIsDarkMode(!isDarkMode);
+  // };
 
   const filteredDishes = dishes.filter(
     (dish) =>
@@ -23,29 +32,35 @@ function App() {
   return (
     <CartProvider>
       <div className={`App ${isDarkMode ? "dark-mode" : ""}`}>
-        <nav className="navbar navbar-expand-lg navbar-light bg-light">
-          <div className="container-fluid">
-            <a className="navbar-brand" href="/">
-              Food App
-            </a>
-            <div className="d-flex">
-              <input
-                className="form-control me-2"
-                type="search"
-                placeholder="Tìm kiếm món ăn..."
-                aria-label="Search"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-              <button
-                className={`btn ${isDarkMode ? "btn-light" : "btn-dark"}`}
+        <Navbar
+          expand="lg"
+          bg={isDarkMode ? "dark" : "light"}
+          variant={isDarkMode ? "dark" : "light"}
+          className="shadow-sm"
+        >
+          <Container fluid>
+            <Navbar.Brand href="/">Food App</Navbar.Brand>
+            <Nav className="ms-auto d-flex align-items-center">
+              <Form className="d-flex me-2">
+                <FormControl
+                  type="search"
+                  placeholder="Tìm kiếm món ăn..."
+                  className="me-2"
+                  aria-label="Search"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </Form>
+              <Button
+                variant={isDarkMode ? "light" : "dark"}
                 onClick={toggleDarkMode}
               >
                 {isDarkMode ? "Light Mode ☀️" : "Dark Mode 🌙"}
-              </button>
-            </div>
-          </div>
-        </nav>
+              </Button>
+            </Nav>
+          </Container>
+        </Navbar>
+
         <DishesList dishes={filteredDishes} />
         <Cart isDarkMode={isDarkMode} />
       </div>
