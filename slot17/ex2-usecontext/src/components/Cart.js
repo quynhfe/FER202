@@ -1,6 +1,13 @@
 import React, { useContext, useState } from "react";
 import { CartContext } from "../context/CartContext";
-import { Modal, Button } from "react-bootstrap";
+import {
+  Container,
+  Card,
+  Button,
+  Modal,
+  ListGroup,
+  Alert,
+} from "react-bootstrap";
 
 const Cart = ({ isDarkMode }) => {
   const { cartItems, removeFromCart, clearCart, totalValue } =
@@ -26,20 +33,20 @@ const Cart = ({ isDarkMode }) => {
   const modalClass = isDarkMode ? "dark-mode-modal" : "";
 
   return (
-    <div className="container my-4">
+    <Container className="my-4">
       <h2 className="text-center mb-4">🛒 Giỏ hàng</h2>
 
       {cartItems.length === 0 ? (
-        <div className="alert alert-info text-center">
+        <Alert variant="info" className="text-center">
           Giỏ hàng của bạn đang trống.
-        </div>
+        </Alert>
       ) : (
-        <div className="card shadow-sm">
-          <ul className="list-group list-group-flush">
+        <Card className="shadow-sm">
+          <ListGroup variant="flush">
             {cartItems.map((item) => (
-              <li
+              <ListGroup.Item
                 key={item.id}
-                className="list-group-item d-flex justify-content-between align-items-center"
+                className="d-flex justify-content-between align-items-center"
               >
                 <div>
                   <strong>{item.name}</strong> <br />
@@ -47,54 +54,56 @@ const Cart = ({ isDarkMode }) => {
                     ${parseFloat(item.price).toFixed(2)}
                   </span>
                 </div>
-                <button
-                  className="btn btn-sm btn-outline-danger"
+                <Button
+                  size="sm"
+                  variant="outline-danger"
                   onClick={() => removeFromCart(item.id)}
                 >
                   Remove
-                </button>
-              </li>
+                </Button>
+              </ListGroup.Item>
             ))}
-          </ul>
+          </ListGroup>
 
-          <div className="card-body text-end">
+          <Card.Body className="text-end">
             <p className="mb-1">
               Tổng số món: <strong>{cartItems.length}</strong>
             </p>
             <p className="mb-3">
               Tổng giá trị: <strong>${totalValue}</strong>
             </p>
-            <button className="btn btn-danger me-2" onClick={clearCart}>
+            <Button variant="danger" className="me-2" onClick={clearCart}>
               Clear Cart
-            </button>
-            <button className="btn btn-success" onClick={handleCheckout}>
+            </Button>
+            <Button variant="success" onClick={handleCheckout}>
               Thanh toán
-            </button>
-          </div>
-        </div>
+            </Button>
+          </Card.Body>
+        </Card>
       )}
 
+      {/* Modal xác nhận */}
       <Modal
         show={showConfirm}
         onHide={() => setShowConfirm(false)}
         contentClassName={modalClass}
       >
         <Modal.Header closeButton className={modalClass}>
-          <Modal.Title className={modalClass}>Xác nhận thanh toán</Modal.Title>
+          <Modal.Title>Xác nhận thanh toán</Modal.Title>
         </Modal.Header>
         <Modal.Body className={modalClass}>
           <h5>Hóa đơn của bạn</h5>
-          <ul className="list-group mb-3">
+          <ListGroup className="mb-3">
             {cartItems.map((item) => (
-              <li
+              <ListGroup.Item
                 key={item.id}
-                className={`list-group-item d-flex justify-content-between ${modalClass}`}
+                className={`d-flex justify-content-between ${modalClass}`}
               >
                 <span>{item.name}</span>
                 <span>${parseFloat(item.price).toFixed(2)}</span>
-              </li>
+              </ListGroup.Item>
             ))}
-          </ul>
+          </ListGroup>
           <p className="fw-bold text-end">Tổng cộng: ${totalValue}</p>
         </Modal.Body>
         <Modal.Footer className={modalClass}>
@@ -107,22 +116,23 @@ const Cart = ({ isDarkMode }) => {
         </Modal.Footer>
       </Modal>
 
+      {/* Modal thành công */}
       <Modal
         show={showSuccess}
         onHide={() => setShowSuccess(false)}
         centered
         contentClassName={modalClass}
       >
-        <Modal.Header closeButton className={modalClass}>
-          <Modal.Title className={`text-success ${modalClass}`}>
+        <Modal.Header closeButton>
+          <Modal.Title className="text-success">
             ✅ Thanh toán thành công
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body className={`text-center ${modalClass}`}>
+        <Modal.Body className="text-center">
           <p>Cảm ơn bạn đã mua hàng 🎉</p>
         </Modal.Body>
       </Modal>
-    </div>
+    </Container>
   );
 };
 
