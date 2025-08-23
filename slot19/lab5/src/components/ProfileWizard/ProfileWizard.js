@@ -147,7 +147,12 @@ const ProfileWizard = ({ show, handleClose, onAddStudent }) => {
   };
 
   const renderStep = () => {
-    const commonProps = { data: state, onFieldChange, errors: state.errors };
+    const commonProps = {
+      data: state,
+      onFieldChange,
+      errors: state.errors,
+      isAttempted,
+    };
     switch (state.step) {
       case 1:
         return <AboutStep {...commonProps} onFileChange={onFileChange} />;

@@ -1,3 +1,6 @@
+/* src/styles/styles.css */
+
+/* --- 1. BIẾN MÀU SẮC & CẤU HÌNH CHUNG --- */
 :root {
   /* Chế độ Sáng (Light Mode) */
   --bg-primary-light: #f8f9fa;
@@ -5,20 +8,27 @@
   --text-primary-light: #212529;
   --text-secondary-light: #6c757d;
   --border-light: #dee2e6;
+  --primary-color-light: #0d6efd;
 
-  /* Chế độ Tối (Dark Mode) - Dựa trên mã màu bạn cung cấp */
-  --bg-primary-dark: #0f0f23; /* Nền chính */
-  --bg-secondary-dark: #1a1a2e; /* Nền Navbar, Modal Footer/Header */
-  --bg-tertiary-dark: #16213e; /* Nền Card, Modal Body, List Item */
-  --text-primary-dark: #e9ecef; /* Chữ chính (trắng ngà) */
-  --text-secondary-dark: #8d99ae; /* Chữ phụ (xám nhạt) */
-  --border-dark: #0f3460; /* Viền chính */
-  --accent-dark: #0e6ba8; /* Màu nhấn khi hover, focus */
+  /* Chế độ Tối (Dark Mode) */
+  --bg-primary-dark: #0f0f23;
+  --bg-secondary-dark: #1a1a2e;
+  --bg-tertiary-dark: #16213e;
+  --text-primary-dark: #e9ecef;
+  --text-secondary-dark: #8d99ae;
+  --border-dark: #0f3460;
+  --accent-dark: #0e6ba8;
 
   /* Màu sắc chung */
-  --primary-color: #5dade2; /* Text-primary màu xanh sáng */
-  --success-color: #28a745; /* Text-success màu xanh lá cây */
-  --danger-color: #ed4245; /* Màu đỏ cho nút xóa, lỗi */
+  --primary-color: #5dade2;
+  --success-color: #28a745;
+  --danger-color: #dc3545;
+  --warning-color: #fee75c;
+
+  /* Màu Alert cho Dark Mode */
+  --danger-bg-dark: rgba(220, 53, 69, 0.15);
+  --danger-text-dark: #f8a0a0;
+  --danger-border-dark: rgba(220, 53, 69, 0.2);
 
   /* Hiệu ứng & Bo góc */
   --border-radius: 0.5rem;
@@ -27,7 +37,7 @@
   --shadow-dark: 0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
-/* --- 2. Style chung & Chế độ Sáng --- */
+/* --- 2. STYLE CHUNG & CHẾ ĐỘ SÁNG --- */
 body {
   background-color: var(--bg-primary-light);
   color: var(--text-primary-light);
@@ -36,8 +46,7 @@ body {
 
 .card,
 .modal-content,
-.list-group-item,
-.alert {
+.list-group-item {
   background-color: var(--bg-secondary-light);
   border: 1px solid var(--border-light);
   border-radius: var(--border-radius);
@@ -56,15 +65,14 @@ body {
   border-color: var(--border-light);
 }
 
-/* --- 3. Ghi đè cho Chế độ Tối (Dark Mode) --- */
+/* --- 3. GHI ĐÈ CHO CHẾ ĐỘ TỐI (DARK MODE) --- */
 body.dark-mode {
   background-color: var(--bg-primary-dark);
   color: var(--text-primary-dark);
 }
 
 body.dark-mode .card,
-body.dark-mode .list-group-item,
-body.dark-mode .alert {
+body.dark-mode .list-group-item {
   background-color: var(--bg-tertiary-dark);
   border-color: var(--border-dark);
   color: var(--text-primary-dark);
@@ -103,28 +111,20 @@ body.dark-mode .form-select:focus {
 body.dark-mode .text-muted {
   color: var(--text-secondary-dark) !important;
 }
-
 body.dark-mode .text-primary {
   color: var(--primary-color) !important;
 }
-
 body.dark-mode .text-success {
   color: var(--success-color) !important;
 }
-
 body.dark-mode .btn-close {
   filter: invert(1) grayscale(100%) brightness(200%);
 }
-
-body.dark-mode .dish-filters {
-  background-color: var(--bg-tertiary-dark) !important;
-}
-
 body.dark-mode .card:hover {
   border-color: var(--accent-dark);
 }
 
-/* --- 4. Style cho các Layout cụ thể --- */
+/* --- 4. STYLE CHO CÁC LAYOUT CỤ THỂ --- */
 .auth-layout {
   display: flex;
   flex-direction: column;
@@ -134,7 +134,6 @@ body.dark-mode .card:hover {
   padding: 1rem;
   position: relative;
 }
-
 .auth-header {
   position: absolute;
   top: 1.5rem;
@@ -144,7 +143,6 @@ body.dark-mode .card:hover {
   justify-content: space-between;
   align-items: center;
 }
-
 .auth-brand {
   font-size: 1.5rem;
   font-weight: bold;
@@ -155,7 +153,7 @@ body.dark-mode .auth-brand {
   color: var(--text-primary-dark);
 }
 
-/* --- 5. Style cho các Component --- */
+/* --- 5. STYLE CHO CÁC COMPONENT --- */
 .hero-carousel .hero-image {
   height: 60vh;
   background-size: cover;
@@ -168,7 +166,6 @@ body.dark-mode .auth-brand {
   right: 0;
   padding: 2rem;
 }
-
 .dish-card {
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out,
     border-color 0.2s ease-in-out;
@@ -194,12 +191,10 @@ body.dark-mode .auth-brand {
   left: 0.5rem;
   font-size: 0.75rem;
 }
-
 .auth-card {
   max-width: 480px;
   width: 100%;
 }
-
 .wizard-header {
   display: flex;
   justify-content: space-around;
@@ -214,7 +209,6 @@ body.dark-mode .auth-brand {
 body.dark-mode .wizard-step {
   color: var(--text-secondary-dark);
 }
-
 .wizard-step .wizard-step-icon {
   width: 40px;
   height: 40px;
@@ -227,7 +221,6 @@ body.dark-mode .wizard-step {
   margin: 0 auto 0.5rem;
   transition: all 0.3s ease;
 }
-
 body.dark-mode .wizard-step .wizard-step-icon {
   background-color: var(--bg-primary-dark);
   border-color: var(--border-dark);
@@ -277,35 +270,34 @@ body.dark-mode .profile-image-placeholder {
   background-color: var(--bg-primary-dark);
   border-color: var(--text-secondary-dark);
 }
+
+/* --- 6. STYLE CHO FOOTER --- */
 .footer-section {
   background-color: var(--bg-secondary-light);
   border-top: 1px solid var(--border-light);
   color: var(--text-secondary-light);
   font-size: 0.9rem;
 }
-
 body.dark-mode .footer-section {
   background-color: var(--bg-secondary-dark);
   border-top: 1px solid var(--border-dark);
   color: var(--text-secondary-dark);
 }
-
 .footer-section h5 {
   color: var(--text-primary-light);
   font-weight: bold;
 }
-
 body.dark-mode .footer-section h5 {
   color: var(--text-primary-dark);
 }
-
 .footer-section .nav-link {
   transition: color 0.2s ease;
 }
-
 .footer-section .nav-link:hover {
   color: var(--primary-color) !important;
 }
+
+/* --- 7. STYLE CHO CUSTOM FILE UPLOADER --- */
 .image-upload-box {
   width: 100%;
   height: 200px;
@@ -316,50 +308,91 @@ body.dark-mode .footer-section h5 {
   justify-content: center;
   cursor: pointer;
   transition: border-color 0.2s ease, background-color 0.2s ease;
-  overflow: hidden; /* Đảm bảo ảnh preview không bị tràn */
+  overflow: hidden;
 }
-
 .image-upload-box:hover {
   border-color: var(--primary-color);
   background-color: #f8f9fa;
 }
-
 .image-upload-box.is-invalid {
   border-color: var(--danger-color);
 }
-
 .image-placeholder {
   display: flex;
   flex-direction: column;
   align-items: center;
   color: var(--text-secondary-light);
 }
-
 .image-preview {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
-
 body.dark-mode .image-upload-box {
   border-color: var(--border-dark);
 }
-
 body.dark-mode .image-upload-box:hover {
   border-color: var(--primary-color);
   background-color: var(--bg-secondary-dark);
 }
-
 body.dark-mode .image-placeholder {
   color: var(--text-secondary-dark);
 }
-.custom-toast-container {
-  top: 0px;
+
+/* --- 8. TÙY CHỈNH VỊ TRÍ TOAST --- */
+/* Đã xử lý bằng inline style trong component */
+
+/* --- 9. TÙY CHỈNH ALERT, FEEDBACK, PAGINATION --- */
+/* Chế độ Sáng */
+.invalid-feedback {
+  color: var(--danger-color);
+}
+.alert {
+  border-radius: var(--border-radius);
+}
+.alert-danger {
+  color: #842029;
+  background-color: #f8d7da;
+  border-color: #f5c2c7;
+}
+.page-link {
+  color: var(--primary-color-light);
+}
+.page-item.active .page-link {
+  background-color: var(--primary-color-light);
+  border-color: var(--primary-color-light);
+}
+
+/* Chế độ Tối */
+body.dark-mode .dish-filters.bg-light {
+  background-color: transparent !important;
 }
 body.dark-mode .invalid-feedback {
-  /* Đổi màu chữ của feedback lỗi sang màu vàng warning */
-  color: var(--warning-color);
+  color: var(--warning-color) !important;
 }
-body .invalid-feedback {
-  color: #dc3545; /* Màu đỏ Bootstrap mặc định cho lỗi */
+body.dark-mode .alert-danger {
+  color: var(--danger-text-dark);
+  background-color: var(--danger-bg-dark);
+  border-color: var(--danger-border-dark);
+}
+body.dark-mode .page-link {
+  background-color: var(--bg-tertiary-dark);
+  border-color: var(--border-dark);
+  color: var(--text-primary-dark);
+}
+body.dark-mode .page-link:hover {
+  background-color: var(--bg-secondary-dark);
+}
+body.dark-mode .page-item.active .page-link {
+  background-color: var(--accent-dark);
+  border-color: var(--accent-dark);
+  color: var(--text-primary-dark);
+}
+body.dark-mode .page-item.disabled .page-link {
+  background-color: var(--bg-tertiary-dark);
+  border-color: var(--border-dark);
+  color: var(--text-secondary-dark);
+}
+body.dark-mode .form-control::placeholder {
+  color: var(--text-secondary-dark);
 }

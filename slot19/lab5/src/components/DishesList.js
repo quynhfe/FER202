@@ -34,7 +34,7 @@ const DishesList = ({ dishes, isFavouritesPage = false }) => {
   };
 
   return (
-    <Row xs={1} sm={2} lg={3} xl={4} className="g-4">
+    <Row xs={1} sm={2} lg={3} className="g-4">
       {dishes.map((dish) => {
         const alreadyFavourite = isFavourite(dish.id);
         return (
@@ -57,6 +57,7 @@ const DishesList = ({ dishes, isFavouritesPage = false }) => {
                   <p className="fw-bold text-primary mb-0 fs-5">
                     ${parseFloat(dish.price).toFixed(2)}
                   </p>
+
                   {isFavouritesPage ? (
                     <Button
                       variant="danger"
@@ -82,7 +83,7 @@ const DishesList = ({ dishes, isFavouritesPage = false }) => {
                   )}
                 </div>
               </Card.Body>
-              <Card.Footer className="d-grid gap-2">
+              <Card.Footer className="d-flex gap-1">
                 <Button variant="success" onClick={() => handleAddToCart(dish)}>
                   <FaShoppingCart className="me-2" />
                   Add to Cart

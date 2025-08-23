@@ -1,4 +1,3 @@
-// src/index.js
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
@@ -8,7 +7,7 @@ import { CartProvider } from "./context/CartContext";
 import { AuthProvider } from "./context/AuthContext";
 import { FavouritesProvider } from "./context/FavouritesContext";
 import { ToastProvider } from "./context/ToastContext";
-import { DishesProvider } from "./context/DishesContext"; // 1. Import DishesProvider
+import { DishesProvider } from "./context/DishesContext";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles/styles.css";
 

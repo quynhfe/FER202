@@ -1,18 +1,22 @@
-import React, { useState, useMemo, useContext } from "react"; // Thêm useContext
-import { Container, Form, FormControl, Alert } from "react-bootstrap";
+import React, { useState, useMemo, useContext } from "react";
+import { Container, Form, FormControl, Alert, Row, Col } from "react-bootstrap";
 import Hero from "../components/Hero";
 import DishesList from "../components/DishesList";
+import PaginationComponent from "../components/PaginationComponent";
+import { DishesContext } from "../context/DishesContext";
 import DishFilters from "../components/DishFilters";
-import { DishesContext } from "../context/DishesContext"; // 1. Import DishesContext
 
 function HomePage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [category, setCategory] = useState("All");
   const [sortOrder, setSortOrder] = useState("default");
-  const { dishes } = useContext(DishesContext); // 2. Lấy danh sách món ăn từ context
+  const { dishes } = useContext(DishesContext);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(6);
 
   const filteredDishes = useMemo(() => {
-    let result = [...dishes]; // Sử dụng 'dishes' từ context
+    let result = [...dishes];
 
     if (searchTerm.trim()) {
       result = result.filter(
@@ -30,37 +34,84 @@ function HomePage() {
       result.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
     }
     return result;
-  }, [searchTerm, category, sortOrder, dishes]); // 3. Thêm 'dishes' vào dependency array
+  }, [searchTerm, category, sortOrder, dishes]);
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentDishes = filteredDishes.slice(indexOfFirstItem, indexOfLastItem);
+
+  const handleItemsPerPageChange = (e) => {
+    setItemsPerPage(Number(e.target.value));
+    setCurrentPage(1);
+  };
 
   return (
     <>
       <Hero />
       <Container className="my-4">
-        <div className="d-flex flex-column flex-md-row gap-3 mb-4">
-          <Form className="flex-grow-1">
-            <FormControl
-              type="search"
-              placeholder="Search for your favorite dish..."
-              aria-label="Search"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </Form>
-          <DishFilters
-            category={category}
-            setCategory={setCategory}
-            sortOrder={sortOrder}
-            setSortOrder={setSortOrder}
-          />
-        </div>
+        <Row className="mb-4 align-items-center">
+          <Col md={5}>
+            <Form className="flex-grow-1">
+              <FormControl
+                type="search"
+                placeholder="Search for your favorite dish..."
+                aria-label="Search"
+                value={searchTerm}
+                onChange={(e) => {
+                  setSearchTerm(e.target.value);
+                  setCurrentPage(1);
+                }}
+              />
+            </Form>
+          </Col>
+          <Col md={7}>
+            <Row className="align-items-center g-2">
+              <Col md={8}>
+                <DishFilters
+                  category={category}
+                  setCategory={(value) => {
+                    setCategory(value);
+                    setCurrentPage(1);
+                  }}
+                  sortOrder={sortOrder}
+                  setSortOrder={(value) => {
+                    setSortOrder(value);
+                    setCurrentPage(1);
+                  }}
+                />
+              </Col>
+              <Col md={4}>
+                <Form.Select
+                  value={itemsPerPage}
+                  onChange={handleItemsPerPageChange}
+                >
+                  <option value={6}>6 per page</option>
+                  <option value={9}>9 per page</option>
+                  <option value={12}>12 per page</option>
+                </Form.Select>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
 
-        {filteredDishes.length > 0 ? (
-          <DishesList dishes={filteredDishes} />
-        ) : (
-          <Alert variant="warning" className="text-center">
-            No dishes found matching your criteria.
-          </Alert>
-        )}
+        <Row className="justify-content-center">
+          <Col lg={10} xl={9}>
+            {currentDishes.length > 0 ? (
+              <DishesList dishes={currentDishes} />
+            ) : (
+              <Alert variant="warning" className="text-center">
+                No dishes found matching your criteria.
+              </Alert>
+            )}
+
+            <PaginationComponent
+              totalItems={filteredDishes.length}
+              itemsPerPage={itemsPerPage}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+            />
+          </Col>
+        </Row>
       </Container>
     </>
   );
