@@ -1,15 +1,10 @@
-// src/context/ThemeContext.js
-import React, { createContext, useState, useEffect } from "react";
-
+import React, { createContext, useState, useEffect, useContext } from "react";
 export const ThemeContext = createContext();
-
+export const useTheme = () => useContext(ThemeContext);
 export const ThemeProvider = ({ children }) => {
-  const prefersDarkMode = window.matchMedia(
-    "(prefers-color-scheme: dark)"
-  ).matches;
   const [isDarkMode, setIsDarkMode] = useState(() => {
     const savedTheme = localStorage.getItem("isDarkMode");
-    return savedTheme !== null ? JSON.parse(savedTheme) : prefersDarkMode;
+    return savedTheme ? JSON.parse(savedTheme) : false;
   });
 
   useEffect(() => {
