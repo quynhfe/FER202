@@ -1,19 +1,10 @@
-// src/context/AuthContext.js
-
-import React, {
-  createContext,
-  useState,
-  useEffect,
-  useCallback,
-  useContext,
-} from "react";
+import React, { createContext, useState, useEffect, useCallback } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import config from "../config"; // Sửa import
+import config from "../config";
 import { useToast } from "./ToastContext";
 
 export const AuthContext = createContext();
 
-// Sửa cách tạo URL
 const ACCOUNTS_API_URL = `${config.dbUrl}/${config.collections.accounts}`;
 
 export const AuthProvider = ({ children }) => {
@@ -23,6 +14,7 @@ export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
   const { showToast } = useToast();
 
+  // Load user from session on initial render
   useEffect(() => {
     const storedUser = sessionStorage.getItem("user");
     if (storedUser) {
@@ -30,6 +22,7 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
+  // Track redirect path
   useEffect(() => {
     if (
       !["/login", "/register"].includes(location.pathname) &&
@@ -62,7 +55,7 @@ export const AuthProvider = ({ children }) => {
             email: config.getField("userEmail", foundUser),
             avatar: config.getField("userAvatar", foundUser),
           };
-          setUser(userData);
+          setUser(userData); // This change will trigger effects in CartContext and WishlistContext
           sessionStorage.setItem("user", JSON.stringify(userData));
           navigate(redirectPath, { replace: true });
           showToast("Login successful!", "success");
@@ -106,6 +99,8 @@ export const AuthProvider = ({ children }) => {
           secretQuestion: data.secretQuestion,
           secretAnswer: data.secretAnswer,
           [config.fields.userAvatar]: data.avatar,
+          wishlist: [], // Initialize with empty wishlist and cart
+          cart: [],
         };
 
         const registerResponse = await fetch(ACCOUNTS_API_URL, {
@@ -115,28 +110,23 @@ export const AuthProvider = ({ children }) => {
         });
 
         if (!registerResponse.ok) throw new Error("Registration failed.");
-        const newUser = await registerResponse.json();
 
-        const userData = {
-          id: config.getField("userId", newUser),
-          name: config.getField("userFullName", newUser),
-          email: config.getField("userEmail", newUser),
-          avatar: config.getField("userAvatar", newUser),
-        };
-        setUser(userData);
-        sessionStorage.setItem("user", JSON.stringify(userData));
-        navigate(redirectPath, { replace: true });
+        navigate("/login");
         return { success: true };
       } catch (error) {
         console.error("Registration error:", error);
-        return { success: false, message: "An error occurred." };
+        return {
+          success: false,
+          message: "An error occurred during registration.",
+        };
       }
     },
-    [navigate, redirectPath]
+    [navigate]
   );
 
   const updateUser = useCallback(
     async (userId, data) => {
+      // ... (updateUser logic remains the same)
       try {
         const updatePayload = {
           [config.fields.userFullName]: data.fullName,
@@ -170,7 +160,7 @@ export const AuthProvider = ({ children }) => {
   );
 
   const logout = useCallback(() => {
-    setUser(null);
+    setUser(null); // This change will trigger effects in CartContext and WishlistContext
     sessionStorage.removeItem("user");
     navigate("/login");
   }, [navigate]);

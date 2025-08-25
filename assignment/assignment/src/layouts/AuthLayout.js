@@ -1,8 +1,11 @@
+// src/layouts/AuthLayout.js
+
 import React from "react";
 import { Outlet, Link } from "react-router-dom";
-import { Container, FormCheck } from "react-bootstrap";
+import { FormCheck } from "react-bootstrap";
 import { useTheme } from "../context/ThemeContext";
 import { FaMoon, FaSun, FaArrowLeft } from "react-icons/fa";
+import ToastNotifications from "../components/ToastNotifications"; // MODIFICATION: Import ToastNotifications
 
 const AuthLayout = () => {
   const { isDarkMode, toggleDarkMode } = useTheme();
@@ -28,6 +31,7 @@ const AuthLayout = () => {
       <main className="auth-container">
         <Outlet />
       </main>
+      <ToastNotifications /> {/* MODIFICATION: Add component here */}
     </div>
   );
 };

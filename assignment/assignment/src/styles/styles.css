@@ -67,19 +67,25 @@ body {
 }
 
 /* --- 3. AUTH LAYOUT --- */
+/* =================================================================== */
+/* THAY THẾ TOÀN BỘ CSS CŨ BẰNG KHỐI NÀY (TỪ MỤC 3 TRỞ ĐI) */
+/* =================================================================== */
+
+/* --- 3. AUTH LAYOUT --- */
 .auth-layout {
   display: flex;
-  flex-direction: column; /* giữ layout cũ */
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   min-height: 100vh;
   padding: 1.5rem;
+  padding-top: 80px; /* Khoảng đệm cho header cố định */
   background-color: var(--bg-primary-light);
-  position: relative;
 }
+
 .auth-header {
-  position: absolute;
-  top: 1.5rem;
+  position: fixed;
+  top: 1rem;
   left: 1.5rem;
   right: 1.5rem;
   display: flex;
@@ -88,11 +94,9 @@ body {
   max-width: 1200px;
   width: calc(100% - 3rem);
   margin: 0 auto;
+  z-index: 20;
 }
-.auth-container {
-  width: 100%;
-  max-width: 500px;
-}
+
 .auth-back-link {
   color: var(--text-secondary-light);
   text-decoration: none;
@@ -100,10 +104,201 @@ body {
   display: flex;
   align-items: center;
 }
+
 .auth-back-link:hover {
   color: var(--brand-primary);
 }
 
+/* --- AUTH FORM STYLING --- */
+.auth-container {
+  width: 100%;
+  max-width: 550px;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  height: 900px;
+}
+
+.auth-form-card {
+  border: none;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 120px); /* Giới hạn chiều cao card */
+}
+
+.auth-form-header {
+  background-color: var(--bg-secondary-light);
+  border-bottom: 1px solid var(--border-light);
+  padding: 1.5rem;
+  flex-shrink: 0; /* Header không co lại */
+}
+
+.auth-form-body {
+  padding: 1.5rem;
+  flex-grow: 1;
+  overflow-y: auto; /* Chỉ phần body được cuộn */
+}
+
+.auth-form-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--border-light);
+  background-color: var(--bg-secondary-light);
+  flex-shrink: 0; /* Footer không co lại */
+}
+
+.auth-form-title {
+  font-size: 1.75rem; /* Điều chỉnh kích thước title */
+  font-weight: 700;
+  margin-bottom: 1.5rem !important;
+}
+
+/* --- REGISTER WIZARD STEPPER --- */
+.wizard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.wizard-step {
+  flex: 0 1 auto;
+  position: relative;
+  color: var(--text-secondary-light);
+  transition: color 0.3s ease;
+}
+
+.wizard-step-icon {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background-color: var(--bg-secondary-light);
+  border: 2px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 0.5rem;
+  transition: all 0.3s ease;
+  font-size: 1.1rem;
+}
+
+.wizard-step-name {
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.wizard-connector {
+  flex: 1 1 auto;
+  height: 2px;
+  background-color: var(--border-light);
+  margin: 0 1rem;
+  transform: translateY(-1.25rem);
+}
+
+.wizard-step.active .wizard-step-icon {
+  border-color: var(--brand-primary);
+  color: var(--brand-primary);
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(14, 107, 168, 0.3);
+}
+
+.wizard-step.active .wizard-step-name {
+  color: var(--brand-primary);
+  font-weight: 700;
+}
+
+.wizard-step.completed .wizard-step-icon {
+  background-color: var(--brand-primary);
+  color: white;
+  border-color: var(--brand-primary);
+}
+
+.wizard-step.completed .wizard-step-name {
+  color: var(--text-primary-light);
+}
+
+.wizard-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* --- DARK MODE FOR AUTH --- */
+body.dark-mode .auth-layout {
+  background-color: var(--bg-primary-dark);
+}
+body.dark-mode .auth-form-card {
+  background-color: var(--bg-secondary-dark);
+}
+body.dark-mode .auth-form-header,
+body.dark-mode .auth-form-footer {
+  background-color: var(--bg-secondary-dark);
+  border-color: var(--border-dark);
+}
+body.dark-mode .wizard-step {
+  color: var(--text-secondary-dark);
+}
+body.dark-mode .wizard-step-icon {
+  background-color: var(--bg-secondary-dark);
+  border-color: var(--border-dark);
+}
+body.dark-mode .wizard-connector {
+  background-color: var(--border-dark);
+}
+body.dark-mode .wizard-step.active .wizard-step-icon {
+  border-color: var(--accent-dark);
+  color: var(--accent-dark);
+}
+body.dark-mode .wizard-step.active .wizard-step-name {
+  color: var(--accent-dark);
+}
+body.dark-mode .wizard-step.completed .wizard-step-icon {
+  background-color: var(--accent-dark);
+  color: var(--text-primary-dark);
+  border-color: var(--accent-dark);
+}
+body.dark-mode .wizard-step.completed .wizard-step-name,
+body.dark-mode .form-text {
+  color: var(--text-primary-dark);
+}
+
+/* --- RESPONSIVE AUTH FORMS --- */
+@media (max-width: 768px) {
+  .auth-container {
+    margin-top: 0;
+  }
+  .auth-form-card {
+    max-height: calc(100vh - 90px); /* Cho phép card cao hơn trên mobile */
+  }
+  .auth-form-title {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .wizard-header {
+    margin-bottom: 1rem;
+  }
+  .wizard-step-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+  .wizard-step-name {
+    font-size: 0.8rem;
+  }
+  .wizard-connector {
+    margin: 0 0.5rem;
+    transform: translateY(-1.1rem);
+  }
+  .auth-form-header,
+  .auth-form-body,
+  .auth-form-footer {
+    padding: 1rem;
+  }
+}
 /* --- 4. HEADER STYLES --- */
 .header-navbar {
   position: sticky;
@@ -790,4 +985,420 @@ body.dark-mode .alert-custom-primary .alert-heading {
 
 body.dark-mode .alert-custom-primary hr {
   border-top-color: var(--border-dark);
+}
+/* src/styles/styles.css */
+
+/* src/styles/styles.css */
+
+/* THAY THẾ TOÀN BỘ PHẦN CSS CŨ CỦA BẠN BẰNG PHẦN NÀY */
+/* --- 16. REGISTER WIZARD STEPPER --- */
+.wizard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.wizard-step {
+  flex: 0 1 auto; /* Don't grow, allow shrinking */
+  position: relative;
+  color: var(--text-secondary-light);
+  transition: color 0.3s ease;
+}
+
+.wizard-step-icon {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background-color: var(--bg-secondary-light);
+  border: 2px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 0.5rem;
+  transition: all 0.3s ease;
+  font-size: 1.1rem;
+}
+
+.wizard-step-name {
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+/* Connector line between steps */
+.wizard-connector {
+  flex: 1 1 auto; /* Grow and shrink */
+  height: 2px;
+  background-color: var(--border-light);
+  margin: 0 1rem;
+  transform: translateY(-1rem); /* Align with the middle of the icons */
+}
+
+/* Styling for the ACTIVE step */
+.wizard-step.active .wizard-step-icon {
+  border-color: var(--brand-primary);
+  color: var(--brand-primary);
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(14, 107, 168, 0.3);
+}
+
+.wizard-step.active .wizard-step-name {
+  color: var(--brand-primary);
+  font-weight: 700;
+}
+
+/* Styling for COMPLETED steps */
+.wizard-step.completed .wizard-step-icon {
+  background-color: var(--brand-primary);
+  color: white;
+  border-color: var(--brand-primary);
+}
+
+.wizard-step.completed .wizard-step-name {
+  color: var(--text-primary-light);
+}
+
+/* Dark Mode Adjustments */
+body.dark-mode .wizard-step {
+  color: var(--text-secondary-dark);
+}
+
+body.dark-mode .wizard-step-icon {
+  background-color: var(--bg-secondary-dark);
+  border-color: var(--border-dark);
+}
+
+body.dark-mode .wizard-connector {
+  background-color: var(--border-dark);
+}
+
+body.dark-mode .wizard-step.active .wizard-step-icon {
+  border-color: var(--accent-dark);
+  color: var(--accent-dark);
+  box-shadow: 0 0 10px rgba(14, 107, 168, 0.3);
+}
+
+body.dark-mode .wizard-step.active .wizard-step-name {
+  color: var(--accent-dark);
+}
+
+body.dark-mode .wizard-step.completed .wizard-step-icon {
+  background-color: var(--accent-dark);
+  color: var(--text-primary-dark);
+  border-color: var(--accent-dark);
+}
+
+body.dark-mode .wizard-step.completed .wizard-step-name {
+  color: var(--text-primary-dark);
+}
+/* --- Enhanced Register Form Styles --- */
+
+/* Auth Layout Improvements */
+.auth-layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; /* Changed from center to flex-start */
+  min-height: 100vh;
+  padding: 1.5rem;
+  background-color: var(--bg-primary-light);
+  position: relative;
+  padding-top: calc(var(--header-height)); /* Add space for fixed header */
+}
+
+/* Register Card Specific Styles */
+.auth-container .card {
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border-light);
+  background-color: var(--bg-secondary-light);
+  margin-bottom: 2rem; /* Add bottom margin for spacing */
+}
+
+.auth-container .card-body {
+  padding: 2rem 1.5rem !important; /* Reduce padding slightly */
+  max-height: calc(100vh - var(--header-height) - 8rem); /* Set max height */
+}
+.register-wizard {
+  height: 500px;
+}
+.register-form-content {
+  height: 400px;
+  overflow: auto; /* đúng chính tả */
+  padding-right: 0.5rem;
+}
+.wizard-navigation {
+  display: flex;
+  justify-content: flex-end; /* nút căn phải */
+  gap: 1rem; /* khoảng cách giữa các nút */
+  padding: 1rem;
+  border-top: 1px solid var(--border-light);
+  background-color: var(--bg-secondary-light);
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
+}
+
+body.dark-mode .wizard-navigation {
+  border-top-color: var(--border-dark);
+  background-color: var(--bg-secondary-dark);
+}
+
+/* Dark mode text adjustments */
+body.dark-mode .register-form-content,
+body.dark-mode .wizard-step-name,
+body.dark-mode .card-body {
+  color: var(--text-primary-dark); /* chữ sáng rõ */
+}
+
+/* Nút nổi bật hơn */
+.wizard-navigation .btn-primary {
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+}
+.wizard-navigation .btn-primary:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+/* Background tối hơn trong dark mode */
+body.dark-mode .auth-container .card,
+body.dark-mode .register-form-content {
+  background-color: #121826; /* tối hơn var(--bg-secondary-dark) */
+}
+/* src/styles/styles.css */
+
+/* --- THÊM VÀO CUỐI FILE --- */
+/* --- 17. AUTH FORM STYLING --- */
+
+/* Định dạng chung cho Card trong trang Login/Register */
+.auth-container .card {
+  width: 100%;
+  max-width: 550px; /* Tăng nhẹ độ rộng cho thoải mái */
+  border: none;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden; /* Quan trọng để bo góc header/footer */
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* Chuẩn hóa Header và Footer của Card */
+.auth-container .card .card-header,
+.auth-container .card .card-footer {
+  background-color: transparent;
+  border-bottom: 1px solid var(--border-light);
+  padding: 1.5rem;
+}
+
+.auth-container .card .card-footer {
+  border-bottom: none;
+  border-top: 1px solid var(--border-light);
+}
+
+/* Phần thân của form, đặc biệt cho Register */
+.auth-container .card .card-body {
+  padding: 1.5rem;
+}
+
+/* Tạo phần thân cuộn được cho form đăng ký */
+.register-form-content {
+  /* Chiều cao tối đa, trừ đi khoảng trống cho header, footer, etc. */
+  max-height: calc(100vh - 350px);
+  overflow-y: auto; /* Bật thanh cuộn khi cần */
+  padding-right: 1rem; /* Thêm khoảng trống cho thanh cuộn */
+}
+
+/* Căn chỉnh các nút điều hướng trong wizard */
+.wizard-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Dark Mode Adjustments */
+body.dark-mode .auth-container .card .card-header,
+body.dark-mode .auth-container .card .card-footer {
+  border-color: var(--border-dark);
+}
+
+/* Tùy chỉnh thanh cuộn cho đẹp hơn (Webkit browsers) */
+.register-form-content::-webkit-scrollbar {
+  width: 8px;
+}
+.register-form-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+.register-form-content::-webkit-scrollbar-thumb {
+  background-color: var(--border-light);
+  border-radius: 10px;
+  border: 2px solid transparent;
+}
+body.dark-mode .register-form-content::-webkit-scrollbar-thumb {
+  background-color: var(--border-dark);
+}
+/* --- 3. AUTH LAYOUT --- */
+.auth-layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
+  padding: 1.5rem;
+  padding-top: calc(1.5rem + 70px); /* Khoảng đệm cho header cố định */
+  background-color: var(--bg-primary-light);
+  position: relative;
+}
+
+.auth-header {
+  position: fixed;
+  top: 1rem;
+  left: 1.5rem;
+  right: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  width: calc(100% - 3rem);
+  margin: 0 auto;
+}
+
+.auth-back-link {
+  color: var(--text-secondary-light);
+  text-decoration: none;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+}
+
+.auth-back-link:hover {
+  color: var(--brand-primary);
+}
+
+/* --- Thống nhất style cho cả Login và Register Card --- */
+.auth-container {
+  width: 100%;
+  max-width: 550px;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.auth-form-card {
+  border: none;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-form-header {
+  background-color: var(--bg-secondary-light);
+  border-bottom: 1px solid var(--border-light);
+  padding: 1.5rem;
+  position: sticky; /* Phần header dính vào top */
+  top: 0;
+  z-index: 10;
+}
+
+.auth-form-body {
+  padding: 1.5rem;
+  flex-grow: 1; /* Cho phép phần body co giãn */
+}
+
+/* Phần thân cuộn được cho form đăng ký */
+.register-form-content {
+  max-height: calc(100vh - 420px); /* Chiều cao tối đa cho phép cuộn */
+  overflow-y: auto;
+  padding-right: 1rem;
+}
+
+.auth-form-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--border-light);
+  background-color: var(--bg-secondary-light);
+}
+
+.auth-form-title {
+  font-size: 2rem; /* Giảm kích thước title */
+  font-weight: bold;
+}
+
+/* Tùy chỉnh Stepper */
+.wizard-header {
+  margin-bottom: 1rem;
+}
+
+.wizard-step-name {
+  font-size: 1rem; /* Tăng kích thước tên step */
+}
+
+/* Dark Mode Adjustments */
+body.dark-mode .auth-form-card {
+  background-color: var(--bg-secondary-dark);
+  border-color: var(--border-dark);
+}
+
+body.dark-mode .auth-form-header,
+body.dark-mode .auth-form-footer {
+  background-color: var(--bg-secondary-dark);
+  border-color: var(--border-dark);
+}
+
+body.dark-mode .auth-form-title {
+  color: var(--text-primary-dark);
+}
+@media (max-width: 576px) {
+  .auth-container {
+    max-width: 95%;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .auth-form-header {
+    padding: 1rem;
+  }
+
+  .auth-form-body {
+    padding: 1rem;
+  }
+
+  .auth-form-title {
+    font-size: 1.5rem;
+  }
+
+  .wizard-header {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .wizard-connector {
+    display: none; /* Ẩn connector ở màn hình nhỏ */
+  }
+
+  .wizard-step {
+    margin-bottom: 1rem;
+  }
+
+  .wizard-step-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .wizard-step-name {
+    font-size: 0.9rem;
+  }
+
+  .auth-form-footer {
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem;
+  }
+}
+
+/* --- DARK MODE CHO UPLOAD PHOTO TEXT --- */
+body.dark-mode .profile-image-upload label {
+  color: var(--text-primary-dark);
 }

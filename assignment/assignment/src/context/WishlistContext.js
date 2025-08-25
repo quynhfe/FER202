@@ -1,57 +1,107 @@
-import React, { createContext, useContext, useReducer, useEffect } from "react";
+// src/context/WishlistContext.js
 
-// Tạo Context
+import React, { createContext, useContext, useReducer, useEffect } from "react";
+import { AuthContext } from "./AuthContext";
+import config from "../config";
+
 export const WishlistContext = createContext();
 
-// Tạo custom hook để sử dụng context dễ dàng hơn
-export const useWishlist = () => useContext(WishlistContext);
-
-// Reducer để xử lý logic thêm/xóa sản phẩm
 const wishlistReducer = (state, action) => {
   switch (action.type) {
+    case "SET_WISHLIST":
+      return { items: action.payload || [] };
     case "TOGGLE_WISHLIST": {
       const itemExists = state.items.find(
-        (item) => item.id === action.payload.id
+        (item) =>
+          config.getField("productId", item) ===
+          config.getField("productId", action.payload)
       );
       if (itemExists) {
-        // Nếu sản phẩm đã có, xóa nó khỏi danh sách
         return {
           ...state,
-          items: state.items.filter((item) => item.id !== action.payload.id),
+          items: state.items.filter(
+            (item) =>
+              config.getField("productId", item) !==
+              config.getField("productId", action.payload)
+          ),
         };
       }
-      // Nếu chưa có, thêm vào danh sách
       return { ...state, items: [...state.items, action.payload] };
     }
-    case "LOAD_WISHLIST":
-      // Load dữ liệu từ localStorage
-      return { ...state, items: action.payload };
+    case "CLEAR_WISHLIST":
+      return { items: [] };
     default:
       return state;
   }
 };
 
-// Provider component
 export const WishlistProvider = ({ children }) => {
   const [state, dispatch] = useReducer(wishlistReducer, { items: [] });
+  const { user, isAuthenticated } = useContext(AuthContext);
 
-  // Lấy dữ liệu từ localStorage khi ứng dụng khởi động
+  // Load wishlist from DB when user logs in
   useEffect(() => {
-    const storedWishlist = localStorage.getItem("wishlist");
-    if (storedWishlist) {
-      dispatch({ type: "LOAD_WISHLIST", payload: JSON.parse(storedWishlist) });
+    const loadWishlist = async () => {
+      if (isAuthenticated && user) {
+        try {
+          const response = await fetch(
+            `${config.dbUrl}/${config.collections.accounts}/${user.id}`
+          );
+          const userData = await response.json();
+          dispatch({ type: "SET_WISHLIST", payload: userData.wishlist || [] });
+        } catch (error) {
+          console.error("Failed to load wishlist:", error);
+        }
+      } else {
+        // Clear wishlist on logout
+        dispatch({ type: "CLEAR_WISHLIST" });
+      }
+    };
+    loadWishlist();
+  }, [isAuthenticated, user]);
+
+  // Function to update wishlist in the database
+  const updateWishlistInDb = async (newWishlist) => {
+    if (!isAuthenticated || !user) return;
+    try {
+      await fetch(`${config.dbUrl}/${config.collections.accounts}/${user.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ wishlist: newWishlist }),
+      });
+    } catch (error) {
+      console.error("Failed to update wishlist in DB:", error);
     }
-  }, []);
+  };
 
-  // Lưu dữ liệu vào localStorage mỗi khi state thay đổi
-  useEffect(() => {
-    localStorage.setItem("wishlist", JSON.stringify(state.items));
-  }, [state.items]);
-
-  // Các hàm và giá trị sẽ được cung cấp cho toàn bộ ứng dụng
-  const toggleWishlist = (product) =>
+  const toggleWishlist = (product) => {
+    // Optimistically update the UI first
     dispatch({ type: "TOGGLE_WISHLIST", payload: product });
-  const isWished = (id) => state.items.some((item) => item.id === id);
+
+    // Then, persist the change to the DB
+    const itemExists = state.items.find(
+      (item) =>
+        config.getField("productId", item) ===
+        config.getField("productId", product)
+    );
+    let newWishlist;
+    if (itemExists) {
+      newWishlist = state.items.filter(
+        (item) =>
+          config.getField("productId", item) !==
+          config.getField("productId", product)
+      );
+    } else {
+      newWishlist = [...state.items, product];
+    }
+    updateWishlistInDb(newWishlist);
+  };
+
+  const isWished = (productId) =>
+    state.items.some(
+      (item) => config.getField("productId", item) === productId
+    );
+
   const wishlistCount = state.items.length;
 
   const value = {

@@ -115,7 +115,7 @@ const ProductCard = ({ product }) => {
                 className="flex-fill"
                 onClick={handleRemoveFromWishlist}
               >
-                Unsave
+                Remove from Wishlist
               </Button>
             ) : wished ? (
               // 2. If NOT on wishlist page but item is wished, link to wishlist
@@ -134,7 +134,7 @@ const ProductCard = ({ product }) => {
                 className="flex-fill"
                 onClick={handleAddToWishlist}
               >
-                ♡ Save
+                ♡ Wishlist
               </Button>
             )}
             {/* === MODIFICATION END === */}

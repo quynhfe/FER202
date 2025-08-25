@@ -34,9 +34,14 @@ function Header() {
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const userAvatar = config.getField("userAvatar", user);
-  const userFullName =
-    config.getField("userFullName", user) || config.getField("userName", user);
+  // Sửa lại cách lấy thông tin user
+  const userAvatar = user ? config.getField("userAvatar", user) : null;
+  const userFullName = user
+    ? config.getField("userFullName", user) ||
+      config.getField("userName", user) ||
+      user.name ||
+      "User"
+    : "User";
 
   const userTitle = (
     <div className="d-flex align-items-center">

@@ -1,10 +1,14 @@
+// src/components/auth/LoginForm.js
+
 import React, { useState, useContext } from "react";
 import { Form, Button, Card, InputGroup, Alert } from "react-bootstrap";
+// MODIFICATION: Xóa useLocation
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const LoginForm = () => {
+  // MODIFICATION: Xóa các dòng liên quan đến location và successMessage
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [generalError, setGeneralError] = useState("");
@@ -34,8 +38,12 @@ const LoginForm = () => {
     <Card>
       <Card.Body className="p-4">
         <h2 className="text-center mb-4">Sign In</h2>
+
+        {/* MODIFICATION: Xóa Alert thành công */}
         {generalError && <Alert variant="danger">{generalError}</Alert>}
+
         <Form noValidate validated={validated} onSubmit={handleSubmit}>
+          {/* ... các trường form giữ nguyên ... */}
           <Form.Group className="mb-3" controlId="email">
             <Form.Label>Email or Username</Form.Label>
             <Form.Control
