@@ -1,3 +1,5 @@
+// src/context/AuthContext.js
+
 import React, {
   createContext,
   useState,
@@ -6,12 +8,13 @@ import React, {
   useContext,
 } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { API_CONFIG } from "../config";
+import config from "../config"; // Sửa import
 import { useToast } from "./ToastContext";
 
 export const AuthContext = createContext();
 
-const ACCOUNTS_API_URL = `${API_CONFIG.BASE_URL}/${API_CONFIG.ENDPOINTS.ACCOUNTS}`;
+// Sửa cách tạo URL
+const ACCOUNTS_API_URL = `${config.dbUrl}/${config.collections.accounts}`;
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -45,16 +48,19 @@ export const AuthProvider = ({ children }) => {
         const accounts = await response.json();
         const foundUser = accounts.find(
           (u) =>
-            (u.email === emailOrUsername || u.username === emailOrUsername) &&
-            u.password === password
+            (config.getField("userEmail", u) === emailOrUsername ||
+              config.getField("userName", u) === emailOrUsername) &&
+            config.getField("userPassword", u) === password
         );
 
         if (foundUser) {
           const userData = {
-            id: foundUser.id,
-            name: foundUser.fullName || foundUser.username,
-            email: foundUser.email,
-            avatar: foundUser.avatar,
+            id: config.getField("userId", foundUser),
+            name:
+              config.getField("userFullName", foundUser) ||
+              config.getField("userName", foundUser),
+            email: config.getField("userEmail", foundUser),
+            avatar: config.getField("userAvatar", foundUser),
           };
           setUser(userData);
           sessionStorage.setItem("user", JSON.stringify(userData));
@@ -78,26 +84,28 @@ export const AuthProvider = ({ children }) => {
         if (!response.ok) throw new Error("Could not fetch accounts.");
         const accounts = await response.json();
 
-        const emailExists = accounts.some((u) => u.email === data.email);
+        const emailExists = accounts.some(
+          (u) => config.getField("userEmail", u) === data.email
+        );
         if (emailExists) {
           return { success: false, message: "Email already exists." };
         }
 
         const usernameExists = accounts.some(
-          (u) => u.username === data.username
+          (u) => config.getField("userName", u) === data.username
         );
         if (usernameExists) {
           return { success: false, message: "Username already exists." };
         }
 
         const newUserPayload = {
-          fullName: data.fullName,
-          email: data.email,
-          username: data.username,
-          password: data.password,
+          [config.fields.userFullName]: data.fullName,
+          [config.fields.userEmail]: data.email,
+          [config.fields.userName]: data.username,
+          [config.fields.userPassword]: data.password,
           secretQuestion: data.secretQuestion,
           secretAnswer: data.secretAnswer,
-          avatar: data.avatar,
+          [config.fields.userAvatar]: data.avatar,
         };
 
         const registerResponse = await fetch(ACCOUNTS_API_URL, {
@@ -110,10 +118,10 @@ export const AuthProvider = ({ children }) => {
         const newUser = await registerResponse.json();
 
         const userData = {
-          id: newUser.id,
-          name: newUser.fullName,
-          email: newUser.email,
-          avatar: newUser.avatar,
+          id: config.getField("userId", newUser),
+          name: config.getField("userFullName", newUser),
+          email: config.getField("userEmail", newUser),
+          avatar: config.getField("userAvatar", newUser),
         };
         setUser(userData);
         sessionStorage.setItem("user", JSON.stringify(userData));
@@ -131,8 +139,8 @@ export const AuthProvider = ({ children }) => {
     async (userId, data) => {
       try {
         const updatePayload = {
-          fullName: data.fullName,
-          avatar: data.avatar,
+          [config.fields.userFullName]: data.fullName,
+          [config.fields.userAvatar]: data.avatar,
         };
 
         const response = await fetch(`${ACCOUNTS_API_URL}/${userId}`, {
@@ -147,8 +155,8 @@ export const AuthProvider = ({ children }) => {
 
         const updatedUserData = {
           ...user,
-          name: updatedUser.fullName,
-          avatar: updatedUser.avatar,
+          name: config.getField("userFullName", updatedUser),
+          avatar: config.getField("userAvatar", updatedUser),
         };
         setUser(updatedUserData);
         sessionStorage.setItem("user", JSON.stringify(updatedUserData));

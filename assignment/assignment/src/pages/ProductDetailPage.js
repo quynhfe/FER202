@@ -1,3 +1,5 @@
+// src/pages/ProductDetailPage.js
+
 import React, { useContext } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import {
@@ -18,6 +20,7 @@ import { AuthContext } from "../context/AuthContext";
 import { useToast } from "../context/ToastContext";
 import LoginConfirmationModal from "../components/LoginConfirmationModal";
 import { FaShoppingCart, FaHeart, FaArrowLeft } from "react-icons/fa";
+import config from "../config"; // Import config
 
 const ProductDetailPage = () => {
   const { id } = useParams();
@@ -46,18 +49,9 @@ const ProductDetailPage = () => {
     );
   }
 
-  // Fix: Try both string and number comparison
-  const product = products.find((p) => {
-    return p.id === parseInt(id) || p.id === id || p.id.toString() === id;
-  });
-
-  // Debug: Add console.log to check the values
-  console.log("URL ID:", id, "Type:", typeof id);
-  console.log(
-    "Products:",
-    products.map((p) => ({ id: p.id, type: typeof p.id }))
+  const product = products.find(
+    (p) => config.getField("productId", p).toString() === id
   );
-  console.log("Found product:", product);
 
   if (!product) {
     return (
@@ -65,7 +59,6 @@ const ProductDetailPage = () => {
         <Alert variant="warning">
           <h2>Product not found!</h2>
           <p>The product you are looking for might not exist.</p>
-          <p>Requested ID: {id}</p>
           <Button as={Link} to="/products">
             Back to Products
           </Button>
@@ -74,12 +67,21 @@ const ProductDetailPage = () => {
     );
   }
 
+  const productId = config.getField("productId", product);
+  const productTitle = config.getField("productTitle", product);
+  const productBrand = config.getField("productBrand", product);
+  const productImage = config.getField("productImage", product);
+  const productPrice = config.getField("productPrice", product);
+  const productSalePrice = config.getField("productSalePrice", product);
+  const productDescription = config.getField("productDescription", product);
+  const productTags = config.getField("productTags", product) || [];
+
   const handleWishlistClick = () => {
     if (!isAuthenticated) {
-      setRedirectPath(`/product/${id}`);
+      setRedirectPath(`/product/${productId}`);
       setModalShow(true);
     } else {
-      const wasAdded = !isWished(product.id);
+      const wasAdded = !isWished(productId);
       toggleWishlist(product);
       showToast(
         wasAdded ? "Added to wishlist!" : "Removed from wishlist.",
@@ -98,7 +100,7 @@ const ProductDetailPage = () => {
     showToast("Added to cart!", "success");
   };
 
-  const wished = isWished(product.id);
+  const wished = isWished(productId);
 
   return (
     <>
@@ -109,11 +111,11 @@ const ProductDetailPage = () => {
               <Col md={6} className="p-3">
                 <div className="position-relative">
                   <Image
-                    src={product.image}
-                    alt={product.title}
+                    src={productImage}
+                    alt={productTitle}
                     className="product-detail-image"
                   />
-                  {product.tags && product.tags.includes("hot") && (
+                  {productTags.includes("hot") && (
                     <Badge
                       bg="danger"
                       className="position-absolute top-0 end-0 m-3"
@@ -124,24 +126,24 @@ const ProductDetailPage = () => {
                 </div>
               </Col>
               <Col md={6} className="d-flex flex-column product-detail-content">
-                <h1 className="product-detail-title">{product.title}</h1>
-                <p className="product-detail-brand">{product.brand}</p>
+                <h1 className="product-detail-title">{productTitle}</h1>
+                <p className="product-detail-brand">{productBrand}</p>
                 <p className="product-detail-description">
-                  {product.description}
+                  {productDescription}
                 </p>
 
                 <div className="product-detail-price">
-                  {product.salePrice ? (
+                  {productSalePrice ? (
                     <>
                       <span className="text-danger fs-4 me-3">
-                        ${product.salePrice}
+                        ${productSalePrice}
                       </span>
                       <span className="text-muted text-decoration-line-through fs-5">
-                        ${product.price}
+                        ${productPrice}
                       </span>
                     </>
                   ) : (
-                    <span className="fs-4">${product.price}</span>
+                    <span className="fs-4">${productPrice}</span>
                   )}
                 </div>
 

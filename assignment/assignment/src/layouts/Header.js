@@ -1,3 +1,5 @@
+// src/layouts/Header.js
+
 import React, { useContext, useState } from "react";
 import {
   Nav,
@@ -22,6 +24,7 @@ import { useTheme } from "../context/ThemeContext";
 import { AuthContext } from "../context/AuthContext";
 import { WishlistContext } from "../context/WishlistContext";
 import { CartContext } from "../context/CartContext";
+import config from "../config"; // Import config
 
 function Header() {
   const { isDarkMode, toggleDarkMode } = useTheme();
@@ -31,19 +34,23 @@ function Header() {
 
   const [isOpen, setIsOpen] = useState(false);
 
+  const userAvatar = config.getField("userAvatar", user);
+  const userFullName =
+    config.getField("userFullName", user) || config.getField("userName", user);
+
   const userTitle = (
     <div className="d-flex align-items-center">
-      {user?.avatar ? (
+      {userAvatar ? (
         <img
-          src={user.avatar}
-          alt={user.name}
+          src={userAvatar}
+          alt={userFullName}
           className="rounded-circle me-2"
           style={{ width: "30px", height: "30px", objectFit: "cover" }}
         />
       ) : (
         <FaUserCircle size="24px" className="me-2" />
       )}
-      <span>{user?.name}</span>
+      <span>{userFullName}</span>
       {isOpen ? (
         <FaChevronUp size="0.7em" className="ms-2" />
       ) : (

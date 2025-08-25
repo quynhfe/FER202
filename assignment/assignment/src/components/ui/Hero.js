@@ -9,7 +9,7 @@ const Hero = () => {
   return (
     <Carousel>
       {heroProducts.map((product) => (
-        <Carousel.Item key={product.id} interval={2000}>
+        <Carousel.Item key={product.id} interval={2000} controls={true}>
           <img
             className="d-block w-100"
             style={{ height: "60vh", objectFit: "cover" }}

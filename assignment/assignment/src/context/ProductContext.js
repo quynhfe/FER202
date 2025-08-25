@@ -1,6 +1,7 @@
+// src/context/ProductContext.js
+
 import React, { createContext, useState, useEffect, useContext } from "react";
-import { API_CONFIG, PRODUCT_FIELD_MAP } from "../config";
-import { transformProductList } from "../utils/dataTransformer";
+import config from "../config"; // Sửa import
 
 export const ProductContext = createContext();
 
@@ -14,18 +15,16 @@ export const ProductProvider = ({ children }) => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
+        // Sửa cách tạo URL
         const response = await fetch(
-          `${API_CONFIG.BASE_URL}/${API_CONFIG.ENDPOINTS.PRODUCTS}`
+          `${config.dbUrl}/${config.collections.products}`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch products");
         }
         const rawData = await response.json();
-        const transformedData = transformProductList(
-          rawData,
-          PRODUCT_FIELD_MAP
-        );
-        setProducts(transformedData);
+        // Không cần transform data ở đây nữa
+        setProducts(rawData);
       } catch (err) {
         setError(err.message);
       } finally {

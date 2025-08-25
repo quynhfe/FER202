@@ -757,3 +757,37 @@ header.navbar {
   flex: 1;
   padding-top: var(--header-height, 70px);
 }
+
+/* src/styles/styles.css */
+
+/* --- 15. CUSTOM COMPONENTS --- */
+
+/* Custom blue alert for light mode */
+.alert-custom-primary {
+  background-color: var(--brand-background);
+  border-color: var(--brand-border);
+  color: var(--brand-primary);
+}
+
+.alert-custom-primary .alert-heading {
+  color: inherit;
+}
+
+.alert-custom-primary hr {
+  border-top-color: var(--brand-border);
+}
+
+/* Custom blue alert for dark mode */
+body.dark-mode .alert-custom-primary {
+  background-color: var(--bg-tertiary-dark);
+  border-color: var(--border-dark);
+  color: var(--text-primary-dark);
+}
+
+body.dark-mode .alert-custom-primary .alert-heading {
+  color: var(--accent-dark);
+}
+
+body.dark-mode .alert-custom-primary hr {
+  border-top-color: var(--border-dark);
+}

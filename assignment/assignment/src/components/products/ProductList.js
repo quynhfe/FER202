@@ -1,10 +1,12 @@
+// src/components/products/ProductList.js
+
 import React, { useState, useMemo, useCallback } from "react";
 import { Row, Col, Alert } from "react-bootstrap";
 import ProductCard from "./ProductCard";
 import Filter from "./Filter";
 import PaginationComponent from "../ui/PaginationComponent";
 import useDebounce from "../../hooks/useDebounce";
-import { APP_CONFIG } from "../../config";
+import config from "../../config"; // Import config
 
 const ProductList = ({ products }) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -13,12 +15,12 @@ const ProductList = ({ products }) => {
   const [tagFilter, setTagFilter] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(
-    APP_CONFIG.ITEMS_PER_PAGE_OPTIONS[0]
+    config.app.ITEMS_PER_PAGE_OPTIONS[0]
   );
 
   const debouncedSearchTerm = useDebounce(
     searchTerm,
-    APP_CONFIG.DEBOUNCE_DELAY
+    config.app.DEBOUNCE_DELAY
   );
 
   const visibleProducts = useMemo(() => {
@@ -26,30 +28,56 @@ const ProductList = ({ products }) => {
 
     if (debouncedSearchTerm) {
       filtered = filtered.filter((p) =>
-        p.title.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
+        config
+          .getField("productTitle", p)
+          .toLowerCase()
+          .includes(debouncedSearchTerm.toLowerCase())
       );
     }
 
     if (brandFilter) {
-      filtered = filtered.filter((p) => p.brand === brandFilter);
+      filtered = filtered.filter(
+        (p) => config.getField("productBrand", p) === brandFilter
+      );
     }
 
+    const tagsField = "productTags";
     if (tagFilter === "sale") {
-      filtered = filtered.filter((p) => p.tags && p.tags.includes("sale"));
+      filtered = filtered.filter(
+        (p) =>
+          config.getField(tagsField, p) &&
+          config.getField(tagsField, p).includes("sale")
+      );
     } else if (tagFilter === "hot") {
-      filtered = filtered.filter((p) => p.tags && p.tags.includes("hot"));
+      filtered = filtered.filter(
+        (p) =>
+          config.getField(tagsField, p) &&
+          config.getField(tagsField, p).includes("hot")
+      );
     } else if (tagFilter === "hot-and-sale") {
       filtered = filtered.filter(
-        (p) => p.tags && p.tags.includes("hot") && p.tags.includes("sale")
+        (p) =>
+          config.getField(tagsField, p) &&
+          config.getField(tagsField, p).includes("hot") &&
+          config.getField(tagsField, p).includes("sale")
       );
     }
 
     const sortFunctions = {
-      "name-asc": (a, b) => a.title.localeCompare(b.title),
+      "name-asc": (a, b) =>
+        config
+          .getField("productTitle", a)
+          .localeCompare(config.getField("productTitle", b)),
       "price-asc": (a, b) =>
-        (a.salePrice || a.price) - (b.salePrice || b.price),
+        (config.getField("productSalePrice", a) ||
+          config.getField("productPrice", a)) -
+        (config.getField("productSalePrice", b) ||
+          config.getField("productPrice", b)),
       "price-desc": (a, b) =>
-        (b.salePrice || b.price) - (a.salePrice || a.price),
+        (config.getField("productSalePrice", b) ||
+          config.getField("productPrice", b)) -
+        (config.getField("productSalePrice", a) ||
+          config.getField("productPrice", a)),
     };
 
     if (sortFunctions[sortOption]) {
@@ -90,10 +118,11 @@ const ProductList = ({ products }) => {
         itemsPerPage={itemsPerPage}
         setItemsPerPage={resetPageAndSet(setItemsPerPage)}
       />
+
       {currentProducts.length > 0 ? (
         <Row xs={1} sm={2} lg={3} className="g-4">
           {currentProducts.map((product) => (
-            <Col key={product.id}>
+            <Col key={config.getField("productId", product)}>
               <ProductCard product={product} />
             </Col>
           ))}

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Form, InputGroup, Button } from "react-bootstrap";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { APP_CONFIG } from "../../config";
+import config from "../../config";
 
 const AccountStep = ({ data, setData, errors }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -76,7 +76,8 @@ const AccountStep = ({ data, setData, errors }) => {
           required
         >
           <option value="">-- Select a Question --</option>
-          {APP_CONFIG.SECRET_QUESTIONS.map((q, i) => (
+          {/* Sửa cách truy cập */}
+          {config.app.SECRET_QUESTIONS.map((q, i) => (
             <option key={i} value={q}>
               {q}
             </option>

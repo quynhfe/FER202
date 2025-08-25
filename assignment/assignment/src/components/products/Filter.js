@@ -1,6 +1,8 @@
+// src/components/products/Filter.js
+
 import React from "react";
 import { Form, Row, Col } from "react-bootstrap";
-import { APP_CONFIG } from "../../config";
+import config from "../../config"; // Import config
 
 const Filter = ({
   products,
@@ -15,7 +17,9 @@ const Filter = ({
   itemsPerPage,
   setItemsPerPage,
 }) => {
-  const uniqueBrands = [...new Set(products.map((p) => p.brand))];
+  const uniqueBrands = [
+    ...new Set(products.map((p) => config.getField("productBrand", p))),
+  ];
 
   return (
     <div className="filter-container">
@@ -68,7 +72,7 @@ const Filter = ({
             value={itemsPerPage}
             onChange={(e) => setItemsPerPage(Number(e.target.value))}
           >
-            {APP_CONFIG.ITEMS_PER_PAGE_OPTIONS.map((num) => (
+            {config.app.ITEMS_PER_PAGE_OPTIONS.map((num) => (
               <option key={num} value={num}>
                 {num} per page
               </option>

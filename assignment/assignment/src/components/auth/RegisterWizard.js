@@ -1,10 +1,10 @@
 import React, { useState, useContext, useCallback } from "react";
-import { Button, ProgressBar, Card, Alert, Form } from "react-bootstrap";
+import { Button, ProgressBar, Alert, Form } from "react-bootstrap";
 import { AuthContext } from "../../context/AuthContext";
 import { useToast } from "../../context/ToastContext";
 import AboutStep from "./AboutStep";
 import AccountStep from "./AccountStep";
-import { APP_CONFIG } from "../../config";
+import config from "../../config";
 
 const RegisterWizard = () => {
   const [step, setStep] = useState(1);
@@ -108,7 +108,7 @@ const RegisterWizard = () => {
             data={data}
             setData={setData}
             errors={errors}
-            secretQuestions={APP_CONFIG.SECRET_QUESTIONS}
+            secretQuestions={config.app.SECRET_QUESTIONS}
           />
         )}
 
