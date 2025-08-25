@@ -22,7 +22,7 @@ const CartDetail = () => {
   const navigate = useNavigate();
 
   return (
-    <Container className="my-5">
+    <Container className="mt-5">
       <h1 className="text-center mb-4 mt-4">Shopping Cart</h1>
       {cartState.items.length === 0 ? (
         <Alert variant="info" className="text-center p-4">

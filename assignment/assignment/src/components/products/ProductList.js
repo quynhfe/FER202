@@ -6,7 +6,7 @@ import ProductCard from "./ProductCard";
 import Filter from "./Filter";
 import PaginationComponent from "../ui/PaginationComponent";
 import useDebounce from "../../hooks/useDebounce";
-import config from "../../config"; // Import config
+import config from "../../config";
 
 const ProductList = ({ products }) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -86,6 +86,15 @@ const ProductList = ({ products }) => {
     return filtered;
   }, [products, debouncedSearchTerm, sortOption, brandFilter, tagFilter]);
 
+  // MODIFICATION: Add function to clear all filters
+  const handleClearFilters = () => {
+    setSearchTerm("");
+    setSortOption("");
+    setBrandFilter("");
+    setTagFilter("");
+    setCurrentPage(1); // Reset to the first page
+  };
+
   const resetPageAndSet = useCallback(
     (setter) => (value) => {
       setter(value);
@@ -117,8 +126,8 @@ const ProductList = ({ products }) => {
         setTagFilter={resetPageAndSet(setTagFilter)}
         itemsPerPage={itemsPerPage}
         setItemsPerPage={resetPageAndSet(setItemsPerPage)}
+        onClearFilters={handleClearFilters} // MODIFICATION: Pass the clear function
       />
-
       {currentProducts.length > 0 ? (
         <Row xs={1} sm={2} lg={3} className="g-4">
           {currentProducts.map((product) => (

@@ -935,10 +935,6 @@ body,
 }
 
 /* Nội dung chính co giãn */
-.main-content {
-  flex: 1;
-  padding: 20px; /* tuỳ bạn */
-}
 
 /* Footer chỉ nằm dưới cùng khi hết nội dung */
 footer {
@@ -950,6 +946,7 @@ header.navbar {
 
 .main-content {
   flex: 1;
+  padding: 0;
   padding-top: var(--header-height, 70px);
 }
 
@@ -1401,4 +1398,55 @@ body.dark-mode .auth-form-title {
 /* --- DARK MODE CHO UPLOAD PHOTO TEXT --- */
 body.dark-mode .profile-image-upload label {
   color: var(--text-primary-dark);
+}
+.clear-filter-icon {
+  cursor: pointer;
+  color: var(--bs-secondary); /* màu xám Bootstrap */
+  transition: color 0.2s ease, transform 0.2s ease;
+  margin-top: 2px; /* chỉnh icon cân hàng với select */
+}
+
+.clear-filter-icon:hover {
+  color: var(--bs-danger); /* đỏ khi hover */
+  transform: scale(1.1);
+}
+/* Animation keyframes */
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-80px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(80px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Apply animation */
+.slide-in-left {
+  animation: slideInLeft 1s ease-out forwards;
+}
+
+.slide-in-up {
+  animation: slideInUp 1s ease-out forwards;
+}
+
+/* Hover effect */
+.btn-animate {
+  transition: all 0.3s ease;
+}
+.btn-animate:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }

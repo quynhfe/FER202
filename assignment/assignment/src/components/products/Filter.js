@@ -1,8 +1,9 @@
 // src/components/products/Filter.js
 
 import React from "react";
-import { Form, Row, Col } from "react-bootstrap";
-import config from "../../config"; // Import config
+import { Form, Row, Col } from "react-bootstrap"; // MODIFICATION: Import Button
+import { FaTimesCircle } from "react-icons/fa";
+import config from "../../config";
 
 const Filter = ({
   products,
@@ -16,15 +17,19 @@ const Filter = ({
   setTagFilter,
   itemsPerPage,
   setItemsPerPage,
+  onClearFilters, // MODIFICATION: Accept clear function prop
 }) => {
   const uniqueBrands = [
     ...new Set(products.map((p) => config.getField("productBrand", p))),
   ];
 
+  // MODIFICATION: Check if any filter is active
+  const isFilterActive = searchTerm || sortOption || brandFilter || tagFilter;
+
   return (
     <div className="filter-container">
       <Row className="g-3 align-items-center">
-        <Col xs={12} md={6} lg={4}>
+        <Col xs={12} md={6} lg={3}>
           <Form.Control
             type="text"
             placeholder="Search by title..."
@@ -79,6 +84,23 @@ const Filter = ({
             ))}
           </Form.Select>
         </Col>
+
+        {/* === MODIFICATION START: Add Clear Filters button === */}
+        <Col
+          xs={1}
+          className="d-flex align-items-center justify-content-center"
+        >
+          {isFilterActive && (
+            <FaTimesCircle
+              role="button"
+              size={24}
+              className="clear-filter-icon"
+              title="Clear filters"
+              onClick={onClearFilters}
+            />
+          )}
+        </Col>
+        {/* === MODIFICATION END === */}
       </Row>
     </div>
   );

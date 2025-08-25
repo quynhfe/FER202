@@ -57,7 +57,7 @@ const config = {
   getField: (internalFieldName, object) => {
     if (!object) return "";
     const externalFieldName = config.fields[internalFieldName];
-    return object[externalFieldName] || "";
+    return object?.[externalFieldName] ?? "";
   },
 };
 
