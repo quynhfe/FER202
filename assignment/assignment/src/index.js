@@ -7,8 +7,7 @@ import { ToastProvider } from "./context/ToastContext";
 import { AuthProvider } from "./context/AuthContext";
 import { WishlistProvider } from "./context/WishlistContext";
 import { CartProvider } from "./context/CartContext";
-import { ProductProvider } from "./context/ProductContext"; // Phải có dòng này
-
+import { ProductProvider } from "./context/ProductContext";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
@@ -17,8 +16,6 @@ root.render(
         <ToastProvider>
           <AuthProvider>
             <ProductProvider>
-              {" "}
-              {/* Phải bọc ở đây */}
               <WishlistProvider>
                 <CartProvider>
                   <App />

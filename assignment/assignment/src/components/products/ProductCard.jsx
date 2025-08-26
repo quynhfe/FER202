@@ -15,7 +15,6 @@ const ProductCard = ({ product }) => {
   const { toggleWishlist, isWished } = useContext(WishlistContext);
   const { isAuthenticated, setRedirectPath } = useContext(AuthContext);
   const { showToast } = useToast();
-  // MODIFICATION: Get the current location
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -26,7 +25,7 @@ const ProductCard = ({ product }) => {
   const productPrice = config.getField("productPrice", product);
   const productSalePrice = config.getField("productSalePrice", product);
   const productTags = config.getField("productTags", product) || [];
-
+  // console.log("Config đọc được:", config.fields.productTitle);
   const handleAddToWishlist = () => {
     if (!isAuthenticated) {
       showToast("Please sign in to save to wishlist", "info");
@@ -107,9 +106,7 @@ const ProductCard = ({ product }) => {
               Add to Cart
             </Button>
 
-            {/* === MODIFICATION START: Updated logic for wishlist button === */}
             {onWishlistPage ? (
-              // 1. If ON the wishlist page, show "Unsave" button
               <Button
                 variant="outline-danger"
                 className="flex-fill"
@@ -118,7 +115,6 @@ const ProductCard = ({ product }) => {
                 Remove from Wishlist
               </Button>
             ) : wished ? (
-              // 2. If NOT on wishlist page but item is wished, link to wishlist
               <Button
                 as={Link}
                 to="/wishlist"
@@ -128,7 +124,6 @@ const ProductCard = ({ product }) => {
                 View Wishlist
               </Button>
             ) : (
-              // 3. If NOT on wishlist page and item is NOT wished, show "Save" button
               <Button
                 variant="outline-danger"
                 className="flex-fill"
@@ -137,7 +132,6 @@ const ProductCard = ({ product }) => {
                 ♡ Wishlist
               </Button>
             )}
-            {/* === MODIFICATION END === */}
           </div>
         </div>
       </Card.Footer>

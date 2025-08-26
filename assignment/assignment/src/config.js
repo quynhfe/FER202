@@ -1,22 +1,15 @@
-// src/config.js
-
 const config = {
-  // URL cơ sở của API
   dbUrl: "http://localhost:3000",
 
-  // Tên các collection trong API
   collections: {
     products: "products",
     accounts: "accounts",
   },
 
-  // Cấu hình cho collection chính (sản phẩm)
   mainCollection: "products",
   mainCollectionLabel: "Products",
 
-  // Ánh xạ tên thuộc tính chung sang tên trường cụ thể trong JSON
   fields: {
-    // Product fields
     productId: "id",
     productTitle: "title",
     productBrand: "name",
@@ -26,7 +19,6 @@ const config = {
     productDescription: "description",
     productTags: "tags",
 
-    // Account fields
     userId: "id",
     userFullName: "fullName",
     userEmail: "email",
@@ -35,7 +27,6 @@ const config = {
     userPassword: "password",
   },
 
-  // Cấu hình chung cho ứng dụng
   app: {
     DEBOUNCE_DELAY: 300,
     ITEMS_PER_PAGE_OPTIONS: [6, 9, 12],

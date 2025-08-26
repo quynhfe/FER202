@@ -67,27 +67,22 @@ export const CartProvider = ({ children }) => {
   const [state, dispatch] = useReducer(cartReducer, { items: [] });
   const { user, isAuthenticated } = useContext(AuthContext);
 
-  // Effect to load cart and handle auth changes
   useEffect(() => {
     const loadAndMergeCart = async () => {
       if (isAuthenticated && user) {
-        // --- LOGGED IN LOGIC ---
         try {
-          // 1. Get user data from DB
           const response = await fetch(
             `${config.dbUrl}/${config.collections.accounts}/${user.id}`
           );
           const userData = await response.json();
           const dbCart = userData.cart || [];
 
-          // 2. Get temporary cart from localStorage
           const localCart = JSON.parse(
             localStorage.getItem(LOCAL_STORAGE_KEY) || "[]"
           );
 
           let finalCart = [...dbCart];
 
-          // 3. If there's a local cart, merge it into the DB cart
           if (localCart.length > 0) {
             localCart.forEach((localItem) => {
               const existingItem = finalCart.find(
@@ -100,7 +95,6 @@ export const CartProvider = ({ children }) => {
               }
             });
 
-            // 4. Update the DB with the merged cart and clear local storage
             await fetch(
               `${config.dbUrl}/${config.collections.accounts}/${user.id}`,
               {
@@ -112,14 +106,11 @@ export const CartProvider = ({ children }) => {
             localStorage.removeItem(LOCAL_STORAGE_KEY);
           }
 
-          // 5. Set the final cart in the state
           dispatch({ type: "SET_CART", payload: finalCart });
         } catch (error) {
           console.error("Failed to load or merge cart:", error);
         }
       } else {
-        // --- GUEST LOGIC ---
-        // Just load the cart from local storage
         const localCart = JSON.parse(
           localStorage.getItem(LOCAL_STORAGE_KEY) || "[]"
         );
@@ -130,9 +121,7 @@ export const CartProvider = ({ children }) => {
     loadAndMergeCart();
   }, [isAuthenticated, user]);
 
-  // Effect to persist cart changes
   useEffect(() => {
-    // We only want to save to localStorage if the user is NOT authenticated
     if (!isAuthenticated) {
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(state.items));
     }
@@ -151,15 +140,12 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  // Wrapped dispatch to handle persistence
   const dispatchAndPersist = (action) => {
     const newState = cartReducer(state, action);
-    dispatch(action); // Update state immediately
-
+    dispatch(action);
     if (isAuthenticated) {
       updateCartInDb(newState.items);
     }
-    // Persistence to localStorage is handled by the second useEffect
   };
 
   const addToCart = (product) =>

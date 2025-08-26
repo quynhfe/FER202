@@ -14,7 +14,6 @@ export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
   const { showToast } = useToast();
 
-  // Load user from session on initial render
   useEffect(() => {
     const storedUser = sessionStorage.getItem("user");
     if (storedUser) {
@@ -22,7 +21,6 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  // Track redirect path
   useEffect(() => {
     if (
       !["/login", "/register"].includes(location.pathname) &&
@@ -55,7 +53,7 @@ export const AuthProvider = ({ children }) => {
             email: config.getField("userEmail", foundUser),
             avatar: config.getField("userAvatar", foundUser),
           };
-          setUser(userData); // This change will trigger effects in CartContext and WishlistContext
+          setUser(userData);
           sessionStorage.setItem("user", JSON.stringify(userData));
           navigate(redirectPath, { replace: true });
           showToast("Login successful!", "success");

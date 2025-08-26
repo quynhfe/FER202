@@ -1,5 +1,3 @@
-// src/context/WishlistContext.js
-
 import React, { createContext, useContext, useReducer, useEffect } from "react";
 import { AuthContext } from "./AuthContext";
 import config from "../config";

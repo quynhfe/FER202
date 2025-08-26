@@ -1,0 +1,181 @@
+/* --- BIẾN MÀU SẮC VÀ FONT --- */
+:root {
+  --primary-color: #5e72e4;
+  --secondary-color: #f7fafc;
+  --text-color: #525f7f;
+  --heading-color: #32325d;
+  --border-color: #e9ecef;
+  --shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+  --border-radius: 0.5rem;
+  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+}
+
+/* --- STYLE CƠ BẢN --- */
+body {
+  margin: 0;
+  font-family: var(--font-family);
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+}
+
+/* --- LAYOUT CHÍNH CỦA APP --- */
+.app-container {
+  padding: 2rem 0;
+}
+
+.app-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.app-header h1 {
+  color: var(--heading-color);
+  font-weight: 600;
+}
+
+.sidebar > * {
+  margin-bottom: 1.5rem;
+}
+
+/* --- STYLE CHO CÁC COMPONENT CARD --- */
+.card {
+  border: 1px solid var(--border-color) !important;
+  border-radius: var(--border-radius) !important;
+  box-shadow: var(--shadow) !important;
+}
+
+.card-header {
+  background-color: #fff !important;
+  border-bottom: 1px solid var(--border-color) !important;
+  font-weight: 600;
+  color: var(--heading-color);
+}
+
+/* --- TÙY CHỈNH CÁC THÀNH PHẦN --- */
+
+/* Product Card */
+.card.h-100 {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card.h-100:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08) !important;
+}
+
+.card-title {
+  color: var(--heading-color);
+  font-size: 1.1rem;
+}
+
+/* Nút bấm */
+.btn-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: #435fe1;
+  border-color: #435fe1;
+  box-shadow: 0 0 0 0.2rem rgba(94, 114, 228, 0.25) !important;
+}
+
+/* Form */
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.2rem rgba(94, 114, 228, 0.25) !important;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 991px) {
+  .sidebar {
+    margin-top: 2rem;
+  }
+}
+/* --- THÊM VÀO CUỐI FILE --- */
+/* --- CART STYLING --- */
+
+.cart-card .card-header {
+  padding: 1rem 1.25rem;
+}
+
+.cart-table {
+  vertical-align: middle; /* Căn giữa nội dung theo chiều dọc */
+}
+
+.cart-table thead th {
+  color: var(--text-color);
+  font-weight: 500;
+  border-bottom-width: 1px;
+}
+
+.cart-table tbody tr:hover {
+  background-color: var(--secondary-color);
+}
+
+.product-info {
+  display: flex;
+  align-items: center;
+}
+
+.product-image-small {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: var(--border-radius);
+  margin-right: 1rem;
+}
+
+.product-title {
+  font-weight: 600;
+  color: var(--heading-color);
+}
+
+.product-price {
+  font-size: 0.9rem;
+  color: var(--text-color);
+}
+
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.quantity-controls .btn {
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  line-height: 1;
+  padding: 0;
+  border-color: var(--border-color);
+}
+
+.quantity-display {
+  font-weight: 600;
+  min-width: 20px;
+  text-align: center;
+}
+
+.remove-btn {
+  color: var(--text-secondary-light);
+  border: none;
+}
+
+.remove-btn:hover {
+  color: var(--brand-red);
+  background-color: rgba(220, 53, 69, 0.1) !important;
+}
+
+.cart-table tfoot {
+  border-top: 2px solid var(--heading-color);
+}
+
+.total-amount {
+  font-size: 1.2rem;
+  color: var(--primary-color);
+}

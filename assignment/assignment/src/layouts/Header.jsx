@@ -24,7 +24,7 @@ import { useTheme } from "../context/ThemeContext";
 import { AuthContext } from "../context/AuthContext";
 import { WishlistContext } from "../context/WishlistContext";
 import { CartContext } from "../context/CartContext";
-import config from "../config"; // Import config
+import config from "../config";
 
 function Header() {
   const { isDarkMode, toggleDarkMode } = useTheme();
@@ -34,7 +34,6 @@ function Header() {
 
   const [isOpen, setIsOpen] = useState(false);
 
-  // Sửa lại cách lấy thông tin user
   const userAvatar = user ? config.getField("userAvatar", user) : null;
   const userFullName = user
     ? config.getField("userFullName", user) ||
