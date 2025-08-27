@@ -162,17 +162,28 @@ export const CartProvider = ({ children }) => {
     () => state.items.reduce((sum, item) => sum + item.qty, 0),
     [state.items]
   );
+  // const subtotal = useMemo(
+  //   () =>
+  //     state.items
+  //       .reduce(
+  //         (sum, item) => sum + (item.salePrice || item.price) * item.qty,
+  //         0
+  //       )
+  //       .toFixed(2),
+  //   [state.items]
+  // );
   const subtotal = useMemo(
     () =>
       state.items
-        .reduce(
-          (sum, item) => sum + (item.salePrice || item.price) * item.qty,
-          0
-        )
+        .reduce((sum, item) => {
+          const priceAsNumber = Number(
+            String(item.price).replace(/[^0-9.-]+/g, "")
+          );
+          return sum + (item.salePrice || priceAsNumber) * item.qty;
+        }, 0)
         .toFixed(2),
     [state.items]
   );
-
   const value = {
     cartState: state,
     addToCart,

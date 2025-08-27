@@ -51,8 +51,8 @@ const CartDetail = () => {
               const itemImage = config.getField("productImage", item);
               const itemBrand = config.getField("productBrand", item);
               const itemPrice = config.getField("productPrice", item);
-              const itemSalePrice = config.getField("productSalePrice", item);
-
+              // const itemSalePrice = config.getField("productSalePrice", item);
+              const itemSalePrice = config.getField("productStock", item);
               return (
                 <ListGroup.Item key={itemId}>
                   <Row className="align-items-center">
