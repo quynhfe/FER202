@@ -4,13 +4,15 @@ import { useParams, Link } from 'react-router-dom';
 import { Container, Row, Col, Card, Button, Spinner, Alert, Toast, ToastContainer, Badge } from 'react-bootstrap';
 import { FaArrowLeft, FaCartPlus, FaHeart, FaCheck, FaMinus, FaPlus } from 'react-icons/fa';
 import api from '../services/api';
-import { formatPrice } from '../utils/format';
+import { formatPrice, assetUrl } from '../utils/format';
 import AppNavbar from '../components/Navbar';
-import { useApp } from '../contexts/AppContext.jsx';
+import { useApp } from '../contexts/AppContext';
 
 const ProductDetails = () => {
     const { id } = useParams();
-    const { addToCart, addToFavourites, isInCart, isInFavourites, cart, updateCartQuantity } = useApp();
+    const productId = parseInt(id, 10);
+
+    const { addToCart, addToFavourites, isInCart, isInFavourites, cart } = useApp();
     const [product, setProduct] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
@@ -19,8 +21,7 @@ const ProductDetails = () => {
     const [toastMessage, setToastMessage] = useState('');
     const [toastVariant, setToastVariant] = useState('success');
 
-    // Get current quantity in cart
-    const cartItem = cart.find(item => item.id === parseInt(id));
+    const cartItem = cart.find(item => item.id === productId);
     const currentCartQuantity = cartItem ? cartItem.quantity : 0;
 
     useEffect(() => {
@@ -29,14 +30,9 @@ const ProductDetails = () => {
                 setLoading(true);
                 setError('');
 
-                console.log('Fetching product with ID:', id);
-
-                const { data } = await api.get(`/products/${id}`);
-
-                console.log('Fetched product data:', data);
+                const { data } = await api.get(`/products/${productId}`);
 
                 if (data) {
-                    // Normalize the product data
                     const normalizedProduct = {
                         id: data.id,
                         name: data.name || data.title,
@@ -58,10 +54,13 @@ const ProductDetails = () => {
             }
         };
 
-        if (id) {
+        if (!isNaN(productId)) {
             fetchProduct();
+        } else {
+            setError('Invalid Product ID');
+            setLoading(false);
         }
-    }, [id]);
+    }, [productId]);
 
     const showNotification = (message, variant = 'success') => {
         setToastMessage(message);
@@ -71,8 +70,6 @@ const ProductDetails = () => {
 
     const handleAddToCart = () => {
         if (!product) return;
-
-        // Add multiple quantities
         for (let i = 0; i < quantity; i++) {
             addToCart(product);
         }
@@ -81,7 +78,6 @@ const ProductDetails = () => {
 
     const handleAddToFavourites = () => {
         if (!product) return;
-
         if (!isInFavourites(product.id)) {
             addToFavourites(product);
             showNotification('Added to favourites!');
@@ -157,7 +153,7 @@ const ProductDetails = () => {
                             <Row className="g-0">
                                 <Col md={6}>
                                     <Card.Img
-                                        src={product.image}
+                                        src={assetUrl(product.image)}
                                         alt={product.name}
                                         style={{
                                             height: '100%',
@@ -186,7 +182,6 @@ const ProductDetails = () => {
                                             {product.description}
                                         </Card.Text>
 
-                                        {/* Quantity Selector */}
                                         <div className="mb-4">
                                             <label className="form-label">Quantity:</label>
                                             <div className="d-flex align-items-center">

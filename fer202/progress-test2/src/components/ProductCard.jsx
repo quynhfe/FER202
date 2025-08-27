@@ -14,7 +14,7 @@ const ProductCard = ({ product }) => {
     const [toastVariant, setToastVariant] = React.useState('success');
 
     const handleViewDetails = () => {
-        navigate(`/products/${product.id}`);
+        navigate(`/products/${product?.id}`);
     };
 
     const handleAddToCart = (e) => {
@@ -44,8 +44,8 @@ const ProductCard = ({ product }) => {
             <Card className="h-100 shadow-sm product-card">
                 <Card.Img
                     variant="top"
-                    src={product.image}
-                    alt={product.name}
+                    src={product?.image}
+                    alt={product?.name}
                     style={{
                         height: '200px',
                         objectFit: 'cover',
@@ -56,7 +56,7 @@ const ProductCard = ({ product }) => {
                 <Card.Body className="d-flex flex-column">
                     <div className="mb-2">
                         <Badge bg="secondary" className="mb-2">
-                            {product.category}
+                            {product?.category}
                         </Badge>
                     </div>
 
@@ -65,16 +65,16 @@ const ProductCard = ({ product }) => {
                         onClick={handleViewDetails}
                         style={{ cursor: 'pointer' }}
                     >
-                        {product.name}
+                        {product?.name}
                     </Card.Title>
 
                     <Card.Text className="flex-grow-1 small text-muted mb-2">
-                        {product.description}
+                        {product?.description}
                     </Card.Text>
 
                     <div className="mb-3">
                         <Badge bg="primary" className="fs-6">
-                            {formatPrice(product.price)}
+                            {formatPrice(product?.price)}
                         </Badge>
                     </div>
 
@@ -95,8 +95,8 @@ const ProductCard = ({ product }) => {
                             className="flex-fill"
                             onClick={handleAddToCart}
                         >
-                            {isInCart(product.id) ? <FaCheck className="me-1" /> : <FaCartPlus className="me-1" />}
-                            {isInCart(product.id) ? 'Added' : 'Cart'}
+                            {isInCart(product?.id) ? <FaCheck className="me-1" /> : <FaCartPlus className="me-1" />}
+                            {isInCart(product?.id) ? 'Added' : 'Cart'}
                         </Button>
 
                         <Button
