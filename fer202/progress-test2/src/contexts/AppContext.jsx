@@ -1,5 +1,5 @@
 // contexts/AppContext.jsx
-import React, { createContext, useContext, useReducer, useEffect } from 'react';
+import React, { createContext, useReducer, useEffect } from 'react';
 
 const AppContext = createContext();
 
@@ -199,10 +199,3 @@ export const AppProvider = ({ children }) => {
   );
 };
 
-export const useApp = () => {
-  const context = useContext(AppContext);
-  if (!context) {
-    throw new Error('useApp must be used within an AppProvider');
-  }
-  return context;
-};
